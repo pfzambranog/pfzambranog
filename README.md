@@ -2,6 +2,7 @@
 - 
 - Estoy interesado en aprender y manejar Github
 - Soy especialista en el manejo y administración de las BD SQL Server, Oracle
+- Estoy dispuesto a colaborar en cualquier proyecto donde mis conocimientos puedan aportar
 - 👀 
 
 <!---
