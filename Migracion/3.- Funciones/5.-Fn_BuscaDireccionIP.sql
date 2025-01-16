@@ -1,6 +1,6 @@
 Create Or Alter Function dbo.Fn_BuscaDireccionIP()
 Returns Varchar(30)
-With encryption 
+-- With encryption 
 As
 
 Begin

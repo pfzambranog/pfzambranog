@@ -26,7 +26,7 @@ Create Or Alter Procedure dbo.Spp_AsignaPermisos
 (@PsBaseDatos    Sysname,
  @PnEstatus      Integer        = 0 Output,
  @PsMensaje      Varchar(250)   = 0 Output)
-With Encryption
+-- With Encryption
 -- With Execute As Sa
 As
 Declare

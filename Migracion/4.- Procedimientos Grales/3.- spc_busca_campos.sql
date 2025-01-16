@@ -2,7 +2,7 @@ Create Or Alter Procedure spc_busca_campos
   (@PsCampo    Varchar(  90),
    @PnEstatus  Integer       = 0  Output,
    @PsMensaje  Varchar( 250) = '' Output)
-With Encryption
+-- With Encryption
 As
 
 Declare
