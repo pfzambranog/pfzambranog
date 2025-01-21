@@ -1,4 +1,22 @@
-Create Or Alter Procedure Spc_Lista_Det_Tablas
+-- Declare
+--    @PsTabla      Varchar( 60) = Null,
+--    @PnEstatus    Integer      = 0,
+--    @PsMensaje    Varchar(250) = ' ';
+-- Begin
+--    Execute dbo.Spc_Lista_Det_Tablas @PsTabla   = @PsTabla,
+--                                     @PnEstatus = @PnEstatus Output,
+--                                     @PsMensaje = @PsMensaje Output;
+--    If @PnEstatus != 0
+--       Begin
+--          Select @PnEstatus error,
+--                 @PsMensaje Mensaje;
+--       End
+-- 
+--    Return
+-- End
+-- Go
+
+Create Or Alter Procedure dbo.Spc_Lista_Det_Tablas
   (@PsTabla      Varchar( 60) = Null,
    @PnEstatus    Integer      = 0   Output,
    @PsMensaje    Varchar(250) = ' ' Output)
@@ -7,14 +25,14 @@ As
 Declare
   C_tablas Cursor For
   Select   Name, id
-  from     Sysobjects 
+  from     Sysobjects
   Where    Uid     = 1
   And      Type    = 'U'
   And      Name    = Case When @PsTabla Is Null
                           Then Name
                           Else @PsTabla
                      End
-  Order    By 1
+  Order    By 1;
 
 Declare
    @w_tabla         Sysname,
@@ -39,10 +57,19 @@ Begin
    Set Ansi_Warnings On
    Set Ansi_Padding  On
 
+
+   Select @PnEstatus     = 0,
+          @PsMensaje     = Char(32),
+          @w_descripcion = Char(32);
+
+--
+-- Generación de Tablas Temporales.
+--
+
    Create table #Tmp_Objectos
    (Orden       SmallInt     Not Null,
     BaseDatos   Sysname      Default ' ',
-    Objeto      Sysname      Default ' ', 
+    Objeto      Sysname      Default ' ',
     Tabla       Sysname      Default ' ',
     idcolumna   Integer          Null,
     Columna     Sysname      Default ' ',
@@ -52,14 +79,16 @@ Begin
     Requerido   Char(2)      Default ' ',
     Llave_Prim  Varchar(5)   Default ' ',
     Llave_For   Varchar(5)   Default ' ',
-    Descripcion NVarchar(1500))
+    Descripcion NVarchar(1500));
 
-   Set @w_descripcion = ''
+--
+-- Inicio de Proceso.
+--
 
    Insert Into #Tmp_Objectos
    (Orden, BaseDatos, Descripcion)
    Select 0, db_Name(), (Select Cast(Value As NVarchar(1550))
-      From   fn_listextendedproperty('MS_Description', Null, Null, Null, Null, 
+      From   fn_listextendedproperty('MS_Description', Null, Null, Null, Null,
               Null, Null))
 
    Open  C_tablas
@@ -73,34 +102,34 @@ Begin
 
       Set @w_descripcion = ''
       Select @w_descripcion = Cast(Value As NVarchar(1550))
-      From   fn_listextendedproperty('MS_Description', 'SCHEMA', 'dbo', 'table', @w_tabla, 
+      From   fn_listextendedproperty('MS_Description', 'SCHEMA', 'dbo', 'table', @w_tabla,
               Null, Null)
 
       Insert Into #Tmp_Objectos
       (Orden, Objeto, tabla, Descripcion)
       Values (1, @w_tabla, @w_tabla, @w_descripcion)
-      
+
       Declare
          C_columnas Cursor For
            Select Name, Column_id
-           From   sys.columns 
+           From   sys.columns
            Where  Object_id = @w_idTabla
            Order  By Column_id
-           
+
       Begin
          Open   C_columnas
          While  @@Fetch_Status < 1
          Begin
             Fetch C_columnas Into @w_columna, @w_column_id
             If @@Fetch_status <> 0
-               Begin 
+               Begin
                   Break
                End
 
             Select @w_column_idx = b.key_ordinal
             From   sys.indexes i
-            Join   sys.index_columns  b  
-            On     i.object_id                         = b.object_id 
+            Join   sys.index_columns  b
+            On     i.object_id                         = b.object_id
             And    i.index_id                          = b.index_id
             And    Col_name(b.object_id, b.column_id)  = @w_columna
             And    b.column_id                         = @w_column_id
@@ -129,14 +158,14 @@ Begin
 
             Set @w_descripcion = ''
             Select @w_descripcion = Cast(Value As NVarchar(1550))
-            From   fn_listextendedproperty('MS_Description', 'Schema', 'dbo', 'table', @w_tabla, 
+            From   fn_listextendedproperty('MS_Description', 'Schema', 'dbo', 'table', @w_tabla,
                     'Column', @w_columna)
-            
-            Execute Spc_valida_longitud @w_Tabla,     @w_Columna,   
+
+            Execute Spc_valida_longitud @w_Tabla,     @w_Columna,
                                         @w_Aplica     Output,     @w_TipoCampo Output, @w_Longitud  Output,
                                         @w_Decimales  Output,     @w_requerido Output, @PnEstatus   Output,
-                                        @PsMensaje    Output 
-  
+                                        @PsMensaje    Output
+
             If @PnEstatus = 0
                Begin
                   Begin Try
@@ -144,7 +173,7 @@ Begin
                     (Orden,  Objeto, idcolumna, Columna,  Tipo, Longitud, Decimales,
                      Requerido, Llave_Prim, Llave_For, Descripcion)
                      Select  2, @w_tabla, @w_column_id, @w_columna, @w_TipoCampo,
-                            Cast(@w_longitud As Varchar(20)), 
+                            Cast(@w_longitud As Varchar(20)),
                             Case When @w_decimales = 0
                                  Then ' '
                                  Else Cast(@w_decimales As Varchar)
@@ -182,11 +211,11 @@ Begin
          Close      C_columnas
          Deallocate C_columnas
       End
-      
+
    End
    Close      C_tablas
    Deallocate C_tablas
-   
+
    Select BaseDatos "Base de Datos", Tabla, Columna, tipo "Tipo de Dato", longitud + Case When Decimales != ' '
                                                            Then ', ' + Decimales
                                                            Else ' '
@@ -195,9 +224,9 @@ Begin
 
    From   #Tmp_Objectos
    Order By Objeto, idcolumna
-   
+
    Return
-   
+
 End
 Go
 
