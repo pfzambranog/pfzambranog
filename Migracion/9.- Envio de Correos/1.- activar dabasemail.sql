@@ -15,3 +15,7 @@ sp_configure 'Database Mail XPs', 1;
 Go
 Reconfigure
 Go
+sp_configure 'xp_cmdshell', 1;
+Go
+Reconfigure
+Go
