@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>SCMBD.dbo</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>SCMBD</b></a><span class="navbar-brand" style="padding-left: 0">.dbo</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>Spp_EjecutaMantenTablas</h1><br />
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 id="Description" class="box-title">Description</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body clearfix">
+                            <p><p>Procedimiento de Mantenimiento de Índices.</p></p>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Parameters</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Mode</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>@PsDbName</td>
+                                    <td>nvarchar</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>@PnEstatus</td>
+                                    <td>int</td>
+                                    <td>INOUT</td>
+                                </tr>
+                                <tr>
+                                    <td>@PsMensaje</td>
+                                    <td>varchar</td>
+                                    <td>INOUT</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-code-o"></i>
+                            <h3 id="RoutineDefinition" class="box-title">Definition</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">/*&#13;&#10;Declare&#13;&#10;   @PsDbName              Sysname      &#61; &#39;SCMBD&#39;,&#13;&#10;   @PnEstatus             Integer      &#61; 0,&#13;&#10;   @PsMensaje             Varchar(250) &#61; Null&#13;&#10;&#13;&#10;Begin&#13;&#10;   Execute dbo.Spp_EjecutaMantenTablas @PsDbName  &#61; @PsDbName,&#13;&#10;                                        @PnEstatus &#61; @PnEstatus Output,&#13;&#10;                                        @PsMensaje &#61; @PsMensaje Output&#13;&#10;&#13;&#10;   Select @PnEstatus, @PsMensaje&#13;&#10;&#13;&#10;   Return&#13;&#10;&#13;&#10;End&#13;&#10;Go&#13;&#10;&#13;&#10;*/&#13;&#10;&#13;&#10;Create   Procedure dbo.Spp_EjecutaMantenTablas&#13;&#10;  (@PsDbName              Sysname      &#61; Null,&#13;&#10;   @PnEstatus             Integer      &#61; 0     Output,&#13;&#10;   @PsMensaje             Varchar(250) &#61; Null  Output)&#13;&#10;As&#13;&#10;&#13;&#10;Declare&#13;&#10;   @w_error             Integer,&#13;&#10;   @w_desc_error        Varchar ( 250),&#13;&#10;   @w_actividad         Varchar (  80),&#13;&#10;   @w_sql               NVarchar(1500),&#13;&#10;   @w_param             NVarchar( 750),&#13;&#10;   @w_existe            Tinyint,&#13;&#10;   @w_existeError       Tinyint,&#13;&#10;   @w_comilla           Char(1),&#13;&#10;   @w_registros         Integer,&#13;&#10;   @w_registro2         Integer,&#13;&#10;   @w_secuencia         Integer,&#13;&#10;   @w_secuencia2        Integer,&#13;&#10;   @w_idProceso         Integer,&#13;&#10;   @w_idProceso2        Integer,&#13;&#10;   @w_object_id         Integer,&#13;&#10;   @w_fragmentacion     Decimal(10, 3),&#13;&#10;   @w_dbName            Sysname,&#13;&#10;   @w_servidor          Sysname,&#13;&#10;   @w_esquema           Sysname,&#13;&#10;   @w_tabla             Sysname,&#13;&#10;   @w_indice            Sysname;&#13;&#10;&#13;&#10;Declare&#13;&#10;   C_BaseD Cursor For&#13;&#10;   Select name&#13;&#10;   From   sys.databases a&#13;&#10;   Where  state_desc &#61; &#39;ONLINE&#39;&#13;&#10;   And    name  Not In (&#39;master&#39;, &#39;tempdb&#39;, &#39;model&#39;, &#39;msdb&#39;)&#13;&#10;   And    name       &#61; Isnull(@PsDbName, a.name);&#13;&#10;&#13;&#10;Begin&#13;&#10;&#13;&#10;/*&#13;&#10;&#13;&#10;Objetivo:    Realiza el mantenimiento de índices de la Base de Datos Seleccionada.&#13;&#10;Programador: Pedro Felipe Zambrano&#13;&#10;Fecha:       06/05/2022&#13;&#10;&#13;&#10;*/&#13;&#10;&#13;&#10;   Set Nocount       On&#13;&#10;   Set Xact_Abort    On&#13;&#10;   Set Ansi_Nulls    Off&#13;&#10;&#13;&#10;--&#13;&#10;-- Incializamos Variables&#13;&#10;--&#13;&#10;&#13;&#10;   Select @PnEstatus        &#61; 0,&#13;&#10;          @PsMensaje        &#61; Null,&#13;&#10;          @w_comilla        &#61; Char(39),&#13;&#10;          @w_servidor       &#61; @@ServerName,&#13;&#10;          @w_secuencia      &#61; 0;&#13;&#10;&#13;&#10;   Begin Try&#13;&#10;      Update catControlProcesosTbl&#13;&#10;      Set    ultFechaEjecucion &#61; Getdate()&#13;&#10;      Where  idProceso         &#61; 2;&#13;&#10;   End Try&#13;&#10;&#13;&#10;   Begin Catch&#13;&#10;      Select  @w_Error      &#61; @@Error,&#13;&#10;              @w_desc_error &#61; Substring (Error_Message(), 1, 230)&#13;&#10;&#13;&#10;   End   Catch&#13;&#10;&#13;&#10;   If IsNull(@w_Error, 0) &lt;&gt; 0&#13;&#10;      Begin&#13;&#10;         Select @PnEstatus &#61; @w_Error,&#13;&#10;                @PsMensaje &#61; &#39;Error.: &#39; + Rtrim(Ltrim(Cast(@w_Error As Varchar))) + &#39; &#39; + @w_desc_error&#13;&#10;&#13;&#10;      End&#13;&#10;&#13;&#10;   Create Table #tempObj1&#13;&#10;   (secuencia       Integer Identity (1, 1) Not Null Primary Key,&#13;&#10;    baseDatos       Sysname                 Not Null,&#13;&#10;    fragmentacion   Decimal(10, 3)              Null,&#13;&#10;    object_id       Integer                 Not Null);&#13;&#10;&#13;&#10;   Create Table #tempObj2&#13;&#10;   (secuencia       Integer Identity (1, 1) Not Null Primary Key,&#13;&#10;    esquema         Sysname                 Not Null,&#13;&#10;    tabla           Sysname                 Not Null,&#13;&#10;    indice          Sysname                     Null);&#13;&#10;&#13;&#10;   Open  C_BaseD&#13;&#10;   While @@Fetch_status &lt; 1&#13;&#10;   Begin&#13;&#10;      Fetch C_BaseD Into @w_dbName&#13;&#10;      If @@Fetch_status !&#61; 0&#13;&#10;         Begin&#13;&#10;            Break&#13;&#10;         End&#13;&#10;&#13;&#10;      Select @w_registro2   &#61; 0,&#13;&#10;             @w_secuencia   &#61; 0,&#13;&#10;             @PnEstatus     &#61; 0,&#13;&#10;             @PsMensaje     &#61; &#39;&#39;,&#13;&#10;             @w_Error       &#61; 0;&#13;&#10;&#13;&#10;      Insert Into dbo.logMantenIndicesTbl&#13;&#10;      (servidor, baseDatos, actividad)&#13;&#10;      Select @w_servidor, @w_dbName, &#39;Proceso de Mantenimiento de Índices&#39;&#13;&#10;      Set @w_idProceso &#61; @@Identity&#13;&#10;&#13;&#10;      Truncate Table #tempObj1&#13;&#10;&#13;&#10;      Set @w_sql &#61; &#39;Select &#39; + @w_comilla  + @w_dbName + @w_comilla + &#39;, avg_fragmentation_in_percent , object_id&#13;&#10;                    From  sys.dm_db_index_physical_stats&#13;&#10;                    (DB_ID(N&#39;+ @w_comilla  + @w_dbName + @w_comilla +&#39;), Null, NULL, NULL , Null)</textarea>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="routine.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

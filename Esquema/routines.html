@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>SCMBD.dbo</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="bower/html5shiv/html5shiv.min.js"></script>
+        <script src="bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="index.html" class="navbar-brand"><b>SCMBD</b></a><span class="navbar-brand" style="padding-left: 0">.dbo</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>Routines</h1>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-code-o" aria-hidden="true"></i>
+                            <h3 class="box-title">Routines</h3>
+                        </div>
+                        <div class="box-body">
+                            <table
+                                    id="routine_table"
+                                    class="table table-bordered table-striped dataTable"
+                                    role="grid"
+                                    data-paging="true"
+                                    data-page-length="50"
+                                    data-length-change="false">
+                                <thead align='left'>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Language</th>
+                                        <th>Deterministic</th>
+                                        <th>Return Type</th>
+                                        <th>Security Restriction</th>
+                                        <th title='Comments' class="toggle"><span>Comments</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><a href="routines/Spa_conProcesosTbl.html">Spa_conProcesosTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_valida_longitud.html">Spc_valida_longitud</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que consulta la longitud de los campos de una tabla específica.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_SolicitaNotificacionControlEnvios.html">Spp_SolicitaNotificacionControlEnvios</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Solicitación de Notificacionesd de Control de Envios.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_splitStringColumna.html">Fn_splitStringColumna</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_catCaracterEspecTbl.html">Spc_catCaracterEspecTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Consulta los datos de La tabla de Caracteres Especiales.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spu_catMensajesErroresTbl.html">Spu_catMensajesErroresTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_existe_tabla.html">Fn_existe_tabla</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>smallint</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_SolicitaCorreoMantBDV2.html">Spp_SolicitaCorreoMantBDV2</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Genera la Solicitud de Notificación de Monitoreo de Base de Datos (link Server, Jobs).</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_enviaCorreoIncidencia.html">Spp_enviaCorreoIncidencia</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Realiza el Envío de correos por Incidencias.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_MantenimientoDepuraTablas.html">Spp_MantenimientoDepuraTablas</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Depuración de datos en tablas incluidas en la entidad catMantenimentoTablasTbl.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_catCriteriosTbl.html">Spc_catCriteriosTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta la tabla de Criterios Valores.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spu_conParametrosGralesTbl.html">Spu_conParametrosGralesTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Actualización de Registros de la tabla de parámetros generales.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_ValidaUsuarioAdmin.html">Fn_ValidaUsuarioAdmin</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>int</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/fn_Encrypta64.html">fn_Encrypta64</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spa_conParametrosGralesTbl.html">Spa_conParametrosGralesTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Alta a la Tabla de Parametros Generales.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spd_catGeneralesTbl.html">Spd_catGeneralesTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que procesa la Baja de Registros en la tabla de catalogos generales.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_GeneraUserBD.html">Spp_GeneraUserBD</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Genera nuevos Usuarios en la Base de Datos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spa_catGeneralesTbl.html">Spa_catGeneralesTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Alta a la Tabla de Catálogos Generales.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_Lista_Det_Vistas.html">Spc_Lista_Det_Vistas</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta las vistas declaradas en la base de datos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_ValidaServicioCorreos.html">Spp_ValidaServicioCorreos</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Proceso de Validación Estatus del Servicio de Correos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_reportaIncTiempoProc.html">Spp_reportaIncTiempoProc</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Proceso de Generación de Notificaciones por Incidencias de Tiempos de Proceso.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spa_Genera_dbLink.html">Spa_Genera_dbLink</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Alta a Link Servers.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_calculaSaludo.html">Fn_calculaSaludo</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>char</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/spd_conProcesosTbl.html">spd_conProcesosTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_BuscaDireccionIP.html">Fn_BuscaDireccionIP</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/fn_DesEncrypta64.html">fn_DesEncrypta64</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_BuscaDescripcionGeneral.html">Fn_BuscaDescripcionGeneral</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_Desencripta_cadena.html">Fn_Desencripta_cadena</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/spc_Lista_Det_Procedimientos.html">spc_Lista_Det_Procedimientos</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta los parámetros de los Procedimientos declarados en la base de datos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_AnalisisObjetosBD.html">Spc_AnalisisObjetosBD</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que lista los objetos de base y fecha de creacion y de modificacion.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_conProcesosTbl.html">Spc_conProcesosTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_Encripta_cadena.html">Fn_Encripta_cadena</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_BuscaDescripcionCriterio.html">Fn_BuscaDescripcionCriterio</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_AnalisisLinkServer.html">Spp_AnalisisLinkServer</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Proceso de Análisis y Validación de Link Server.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_Lista_Det_Funciones.html">Spc_Lista_Det_Funciones</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta los parámetros de los Funciones declarados en la base de datos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/spu_conEmisionNotificacionesTbl.html">spu_conEmisionNotificacionesTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Actualiza la tabla conEmisionNotificacionesTbl.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Sp_valida_longitud.html">Sp_valida_longitud</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Validación de la Longitud de un campo de una tabla determinada.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_SolicitaCorreoMantBD.html">Spp_SolicitaCorreoMantBD</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Genera la Solicitud de Notificación de Monitoreo de Base de Datos (Altos tiempos de Ejecución y Bloqueos).</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_ValidaCorreo.html">Fn_ValidaCorreo</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>bit</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_Lista_Param_Procedimientos.html">Spc_Lista_Param_Procedimientos</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta los procedimientos y sus parámetros, declarados en la base de datos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/spp_DepuracionTablasLog.html">spp_DepuracionTablasLog</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Depura tablas de movimientos y logs.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_ConvierteNumeroLetra.html">Fn_ConvierteNumeroLetra</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_GeneraNombreTablaDin.html">Fn_GeneraNombreTablaDin</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>nvarchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_Lista_Det_Tablas.html">Spc_Lista_Det_Tablas</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta los Campos de las tablas.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_Busca_MensajeError.html">Fn_Busca_MensajeError</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_validaTiempoProcesos.html">Spp_validaTiempoProcesos</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Validación de Tiempos Excesivos de Proceso.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_validaTabla.html">Spc_validaTabla</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Valida la Existencia de una Tabla en la Base de Datos en el esquema dbo.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spa_catMensajesErroresTbl.html">Spa_catMensajesErroresTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_ValidaServicioNotPush.html">Spp_ValidaServicioNotPush</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Validación del Servicio de Notificaciones Push.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_MantenimientoBD_1.html">Spp_MantenimientoBD_1</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Análiza, Valida y ejecuta Mantenimiento a la BD.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_validaBloqueos.html">Spp_validaBloqueos</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Validación de Procesos Bloqueados.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_ProcesaConsultaHtmlTable.html">Spp_ProcesaConsultaHtmlTable</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Construye una tabla XML desde una consulta SQL para presentarla en HTML.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_notificaAnalisisEjecucionProc.html">Spp_notificaAnalisisEjecucionProc</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Consulta a las Ejecuciones de Procedimientos Compilados en Base de Datos Seleccionada.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_ValidaExistaLinkServer.html">Fn_ValidaExistaLinkServer</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>int</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_calculaEspacioDD.html">Spp_calculaEspacioDD</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_ValidaUsuario.html">Fn_ValidaUsuario</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>int</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_conParametrosGralesTbl.html">Spc_conParametrosGralesTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta la tabla de Catálogos de Parámetros Generales.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_BuscaMes.html">Fn_BuscaMes</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_SolicitaCorreoMasivoMantBD.html">Spp_SolicitaCorreoMasivoMantBD</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Solicitud de Notificaciones por Proceso Mantenimiento de Base de Datos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_ValidaArchivo.html">Spp_ValidaArchivo</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Consulta de la Existencia física de un archivo en el DD.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_Busca_DireccionMac.html">Fn_Busca_DireccionMac</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>char</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_lista_dim_tablas.html">Spc_lista_dim_tablas</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta el detalle de las tablas declaradas en la base de datos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_AnalisisJobsNoEjecutados.html">Spp_AnalisisJobsNoEjecutados</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Validación de Jobs No Ejecutados.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_AnalisisTabla.html">Spc_AnalisisTabla</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta el Estatus de las tablas de la base de datos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Sp_ValidaCadena.html">Sp_ValidaCadena</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Alta a la tabla catMensajesErroresTbl.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/fn_EncryptBase64.html">fn_EncryptBase64</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>nvarchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spd_conParametrosGralesTbl.html">Spd_conParametrosGralesTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que procesa la baja de registros de la tabla de Parámetros Generales..</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_AnalisisObjetosNoValidos.html">Spp_AnalisisObjetosNoValidos</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Consulta y Reporta los Objetos no válidos de la BD Seleecionada.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_EjecutaMantenBD_1.html">Spp_EjecutaMantenBD_1</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Análiza, Valida y ejecuta Mantenimiento a las BD online en la instancia.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_Lista_Det_Triggers.html">Spc_Lista_Det_Triggers</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta los disparadores declarados en la base de datos.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/spc_busca_campos.html">spc_busca_campos</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta las tablas que contengan un campo solicitado.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_conProcesosTbl.html">Spp_conProcesosTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_catMensajesErroresTbl.html">Spc_catMensajesErroresTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Consulta la tabla de Catálogos de Errores.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/spp_reindexa.html">spp_reindexa</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que Realiza la reindexación de los indices.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spu_catGeneralesTbl.html">Spu_catGeneralesTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Actualización de Registros de la tabla de catálogos generales.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_EjecutaMantenTablas.html">Spp_EjecutaMantenTablas</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Mantenimiento de Índices.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Fn_BuscaValorParametro.html">Fn_BuscaValorParametro</a></td>
+                                        <td>FUNCTION</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td>varchar</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spp_EjecutaMantenIndices.html">Spp_EjecutaMantenIndices</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento de Mantenimiento de Índices.</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="routines/Spc_catGeneralesTbl.html">Spc_catGeneralesTbl</a></td>
+                                        <td>PROCEDURE</td>
+                                        <td>SQL</td>
+                                        <td>false</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><p>Procedimiento que lista los Valores de lla Tabla de Catalogos Generales.</p></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                <script>
+                    var config = {
+                        pagination: true
+                    }
+                </script>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="bower/pdfmake/pdfmake.min.js"></script>
+        <script src="bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="bower/codemirror/codemirror.js"></script>
+        <script src="bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="routines.js"></script>
+        <script src="schemaSpy.js"></script>
+    </body>
+</html>

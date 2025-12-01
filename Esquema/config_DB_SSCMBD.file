@@ -1,0 +1,28 @@
+# type of database. Run with -dbhelp for details
+# if mssql doesn't work: try mssql08 in combination with sqljdbc_7.2, this combination has been tested
+# 
+# Instrucccion de Ejecucion.
+# java -jar C:\Software\schemaspy\schemaspy-6.2.4.jar -configFile C:\BaseDatos\SCMBD\Back\Esquema\config_DB_SSCMBD.file
+
+schemaspy.t=mssql17
+
+# optional path to alternative jdbc drivers.
+
+schemaspy.dp=C:\Program Files\Microsoft JDBC DRIVER 12.6 for SQL Server\sqljdbc_4.2\enu\sqljdbc4-3.0.jar
+
+# database properties: host, port number, name user, password
+
+schemaspy.host=127.0.0.1
+schemaspy.port=1433
+schemaspy.db=SCMBD
+schemaspy.u=sa
+schemaspy.p=Pedro
+
+# output dir to save generated files
+
+schemaspy.o=C:\BaseDatos\SCMBD\Back\Esquema
+
+# db scheme for which generate diagrams
+schemaspy.s=dbo
+
+schemaspy.description=Monitoreo Y Mantenimiento de Base de Datos
