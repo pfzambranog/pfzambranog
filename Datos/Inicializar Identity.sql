@@ -1,0 +1,1 @@
+Dbcc Checkident('conProcesosTbl', RESEED, 0)
