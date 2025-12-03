@@ -10,7 +10,7 @@ Declare
 
 Begin
    Select @w_idProceso = Max(idProceso)
-   From   SMBDTI.dbo.logAnalisisJobsTbl
+   From   SCMBD.dbo.logAnalisisJobsTbl
 
    Execute dbo.Spp_AnalisisJobsNoEjecutados @PnEstatus = @PnEstatus Output,
                                             @PsMensaje = @PsMensaje Output;
@@ -21,7 +21,7 @@ Begin
       End
 
    Select *
-   From   SMBDTI.dbo.logAnalisisJobsTbl
+   From   SCMBD.dbo.logAnalisisJobsTbl
    Where  idProceso > Isnull(@w_idProceso, 0);
 
    Return

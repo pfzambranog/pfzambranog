@@ -73,7 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>conMotivosCorreoTbl</h1><p><span id="recordNumber">3</span> rows</p><br />
+                    <h1>conMotivosCorreoTbl</h1><p><span id="recordNumber">4</span> rows</p><br />
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
@@ -169,7 +169,7 @@
                                     <td><span id="titulo">titulo</span></td>
                                     <td>varchar</td>
                                     <td>1000</td>
-                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
                                     <td title=''></td>
                                     <td>null</td>
                                     <td>
@@ -186,7 +186,7 @@
                                     <td><span id="cuerpo">cuerpo</span></td>
                                     <td>varchar</td>
                                     <td>8000</td>
-                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
                                     <td title=''></td>
                                     <td>null</td>
                                     <td>
@@ -218,9 +218,9 @@
                                 </tr>
                                 <tr>
                                     <td><span id="idUsuarioAct">idUsuarioAct</span></td>
-                                    <td>smallint</td>
-                                    <td>2</td>
-                                    <td title='nullable'>√</td>
+                                    <td>int</td>
+                                    <td>4</td>
+                                    <td title=''></td>
                                     <td title=''></td>
                                     <td>null</td>
                                     <td>
@@ -237,7 +237,7 @@
                                     <td><span id="fechaAct">fechaAct</span></td>
                                     <td>datetime</td>
                                     <td>16,3</td>
-                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
                                     <td title=''></td>
                                     <td>(getdate())</td>
                                     <td>
@@ -318,6 +318,23 @@
                                     </td>
                                     <td><p>Texto del Correo  en Formato HTML</p></td>
                                 </tr>
+                                <tr>
+                                    <td><span id="perfilCorreo">perfilCorreo</span></td>
+                                    <td>sysname</td>
+                                    <td>256</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Perfil de Correo Relacionado al Motivo de Correo</p></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -378,7 +395,7 @@
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
 <area shape="rect" id="node1" href="conProcedimientosCorreoTbl.html" target="_top" title="conProcedimientosCorreoTbl" alt="" coords="369,5,667,152">
-<area shape="rect" id="node2" href="conMotivosCorreoTbl.html" target="_top" title="conMotivosCorreoTbl" alt="" coords="5,99,325,491">
+<area shape="rect" id="node2" href="conMotivosCorreoTbl.html" target="_top" title="conMotivosCorreoTbl" alt="" coords="5,99,325,520">
 <area shape="rect" id="node3" href="conProcesosTbl.html" target="_top" title="conProcesosTbl" alt="" coords="414,169,622,316">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/conMotivosCorreoTbl.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
@@ -386,7 +403,7 @@
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
 <area shape="rect" id="node1" href="conProcedimientosCorreoTbl.html" target="_top" title="conProcedimientosCorreoTbl" alt="" coords="369,5,667,152">
-<area shape="rect" id="node2" href="conMotivosCorreoTbl.html" target="_top" title="conMotivosCorreoTbl" alt="" coords="5,99,325,491">
+<area shape="rect" id="node2" href="conMotivosCorreoTbl.html" target="_top" title="conMotivosCorreoTbl" alt="" coords="5,99,325,520">
 <area shape="rect" id="node3" href="conProcesosTbl.html" target="_top" title="conProcesosTbl" alt="" coords="414,169,622,316">
 <area shape="rect" id="node4" href="movDatosAdicionalesCorreoTbl.html" target="_top" title="movDatosAdicionalesCorreoTbl" alt="" coords="711,172,1027,260">
 </map>

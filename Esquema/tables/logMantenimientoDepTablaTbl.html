@@ -73,7 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>logMantenimientoDepTablaTbl</h1><p><span id="recordNumber">0</span> rows</p><br />
+                    <h1>logMantenimientoDepTablaTbl</h1><p><span id="recordNumber">6</span> rows</p><br />
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
@@ -123,10 +123,10 @@
                                 <tbody>
                                 <tr>
                                     <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="idProceso">idProceso</span></td>
-                                    <td>int identity</td>
+                                    <td>int</td>
                                     <td>4</td>
                                     <td title=''></td>
-                                    <td title='Automatically updated by the database'>√</td>
+                                    <td title=''></td>
                                     <td>null</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
@@ -137,6 +137,28 @@
                                         </table>
                                     </td>
                                     <td><p>Identificador Correlativo del Proceso de Depuración</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="secuencia">secuencia</span></td>
+                                    <td>int</td>
+                                    <td>4</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="logMantenimientoDepTablaTbl.secuencia references catMantenimentoTablasTbl.idProceso via logMantenimientoDepTablaFk01"><a href='catMantenimentoTablasTbl.html'>catMantenimentoTablasTbl</a><span class='relatedKey'>.idProceso</span></td>
+                                                <td class="constraint detail">logMantenimientoDepTablaFk01</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td><p>Secuencia del Correlativo del Proceso de Depuración</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="servidor">servidor</span></td>
@@ -170,7 +192,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>Identificador de la Base de Datos donde se realizó Proceso de Depuración</p></td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td><span id="tabla">tabla</span></td>
@@ -276,7 +298,7 @@
                                 </tr>
                                 <tr>
                                     <td><span id="informado">informado</span></td>
-                                    <td>bit</td>
+                                    <td>tinyint</td>
                                     <td>1</td>
                                     <td title=''></td>
                                     <td title=''></td>
@@ -324,8 +346,8 @@
                                 <tr>
                                     <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> logMantenimientoDepTablaPk</td>
                                     <td>Primary key</td>
-                                    <td><span title='Ascending'>Asc</span></td>
-                                    <td>idProceso</td>
+                                    <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
+                                    <td>idProceso + secuencia</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -349,7 +371,8 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="logMantenimientoDepTablaTbl.html" target="_top" title="logMantenimientoDepTablaTbl" alt="" coords="5,5,392,368">
+<area shape="rect" id="node1" href="logMantenimientoDepTablaTbl.html" target="_top" title="logMantenimientoDepTablaTbl" alt="" coords="328,5,715,397">
+<area shape="rect" id="node2" href="catMantenimentoTablasTbl.html" target="_top" title="catMantenimentoTablasTbl" alt="" coords="5,37,284,155">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/logMantenimientoDepTablaTbl.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>

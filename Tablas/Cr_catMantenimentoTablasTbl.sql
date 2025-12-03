@@ -14,7 +14,7 @@ Go
 Create Table dbo.catMantenimentoTablasTbl
 (idProceso         Integer       Not Null    Identity(1, 1),
  servidor          Sysname       Not Null    Default @@ServerName,
- baseDatos         Sysname       Not Null,
+ baseDatos         Sysname       Not Null    Default db_name(),
  tabla             Sysname       Not Null,
  idTipoDep         Tinyint       Not Null    Default 1,
  campo             Sysname           Null,

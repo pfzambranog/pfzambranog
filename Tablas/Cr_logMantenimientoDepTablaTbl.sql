@@ -12,7 +12,8 @@ If Exists (Select Top 1 1
 Go
 
 Create Table logMantenimientoDepTablaTbl
-(idProceso     Integer       Not Null   Identity(1, 1),
+(idProceso     Integer       Not Null,
+ secuencia     Integer       Not Null,
  servidor      Sysname       Not Null   Default @@ServerName,
  baseDatos     Sysname       Not Null,
  tabla         Sysname       Not Null,
@@ -23,7 +24,10 @@ Create Table logMantenimientoDepTablaTbl
  mensajeError  Varchar(250)  Not Null   Default '',
  informado     Tinyint       Not Null   Default 0,
 Constraint logMantenimientoDepTablaPk
-Primary Key (idProceso))
+Primary Key (idProceso, secuencia),
+Constraint logMantenimientoDepTablaFk01
+Foreign Key (secuencia)
+References  catMantenimentoTablasTbl (idProceso) On Delete Cascade)
 Go
 
 --
@@ -47,6 +51,16 @@ Exec sys.sp_addextendedproperty @name       = 'MS_Description',
                                 @level1name = 'logMantenimientoDepTablaTbl', 
                                 @level2type = 'Column',
                                 @level2name = 'idProceso'
+Go
+
+Exec sys.sp_addextendedproperty @name       = 'MS_Description', 
+                                @value      = 'Secuencia del Correlativo del Proceso de Depuración' , 
+                                @level0type = 'Schema',
+                                @level0name = 'dbo', 
+                                @level1type = 'Table',
+                                @level1name = 'logMantenimientoDepTablaTbl', 
+                                @level2type = 'Column',
+                                @level2name = 'secuencia'
 Go
 
 Exec sys.sp_addextendedproperty @name       = 'MS_Description', 

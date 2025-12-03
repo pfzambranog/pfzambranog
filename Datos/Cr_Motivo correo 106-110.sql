@@ -8,11 +8,11 @@ If Not Exists ( Select top 1 1
       Insert Into dbo.conMotivosCorreoTbl
       (idMotivo,      descripcion,  titulo,   cuerpo,
        URL,           idUsuarioAct, fechaAct, ipAct,
-       macAddressAct, permiteCompartir,       Html)
+       macAddressAct, permiteCompartir,       perfilCorreo, Html)
       Select 106, 'Incidencias BD', 'Incidencias BD',
       '&saludo&, &Nombre& Por medio del presente se te informa que el proceso de &incidencia&, EN EL SERVIDOR &servidor& ',
       '',             18,           Getdate(), dbo.Fn_BuscaDireccionIP(),
-      dbo.Fn_Busca_DireccionMAC(), 0,
+      dbo.Fn_Busca_DireccionMAC(), 0, 'Incidencias BD',
             '<!DOCTYPE html>
     <html lang="es">
         <tbody>
@@ -39,6 +39,7 @@ Else
              ipAct            = dbo.Fn_BuscaDireccionIP(),
              macAddressAct    = dbo.Fn_Busca_DireccionMAC(),
              permiteCompartir = 0,
+             perfilCorreo     = 'Incidencias BD',
              Html             = '<!DOCTYPE html>
      <html lang="es">
         <tbody>
@@ -60,7 +61,7 @@ If Not Exists ( Select top 1 1
       Insert Into dbo.conMotivosCorreoTbl
       (idMotivo,      descripcion,  titulo,   cuerpo,
        URL,           idUsuarioAct, fechaAct, ipAct,
-       macAddressAct, permiteCompartir, Html)
+       macAddressAct, permiteCompartir, perfilCorreo Html)
       Select 110, 'Incidencias BD', 'Tiempos Altos de Ejecución',
       '&saludos&, &Nombre&
       
@@ -69,7 +70,7 @@ If Not Exists ( Select top 1 1
        Presiona el Link para ver mas detalles 
        &URL&',
       '',             18,     Getdate(), dbo.Fn_BuscaDireccionIP(),
-      dbo.Fn_Busca_DireccionMAC(), 0,
+      dbo.Fn_Busca_DireccionMAC(), 0, 'Incidencias BD',
             '<!DOCTYPE html>
     <html lang="es">
         <tbody>

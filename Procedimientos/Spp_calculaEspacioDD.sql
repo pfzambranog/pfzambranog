@@ -1,4 +1,4 @@
-USE [SCMBD]
+Use SCMBD
 GO
 
 /*
@@ -115,7 +115,6 @@ Versión:     1
       Begin
          Set @w_ambiente = ''
       End
-
 
    Select @w_usuario = parametroChar
    From   dbo.conParametrosGralesTbl

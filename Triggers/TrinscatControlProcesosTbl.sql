@@ -78,7 +78,7 @@ Go
 --
 
 Declare
-   @w_valor          Varchar(1500) = 'Disparados de Insert / Update de la entidad catControlProcesosTbl.',
+   @w_valor          Varchar(1500) = 'Disparador de Insert / Update de la entidad catControlProcesosTbl.',
    @w_tabla          Sysname       = 'catControlProcesosTbl',
    @w_objeto         Sysname       = 'TrinscatControlProcesosTbl';
 

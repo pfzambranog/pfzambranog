@@ -2,7 +2,7 @@
 # if mssql doesn't work: try mssql08 in combination with sqljdbc_7.2, this combination has been tested
 # 
 # Instrucccion de Ejecucion.
-# java -jar C:\Software\schemaspy\schemaspy-6.2.4.jar -configFile C:\BaseDatos\SCMBD\Back\Esquema\config_DB_SSCMBD.file
+# java -jar C:\Software\schemaspy\schemaspy-6.2.4.jar -configFile C:\BaseDatos\SCMBD\Back\Esquema\config_DB_SCMBD.file
 
 schemaspy.t=mssql17
 
