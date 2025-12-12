@@ -603,7 +603,7 @@ Salida:
 
          Update dbo.catControlProcesosTbl
          Set    ultFechaNotifif    = Getdate()
-         Where  idProceso = 5;
+         Where  idProceso = 13;
 
       End
 

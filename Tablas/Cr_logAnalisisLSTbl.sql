@@ -12,7 +12,8 @@ If Exists (Select Top 1 1
 Go
 
 Create Table dbo.logAnalisisLSTbl
-(idProceso     Integer       Not Null   Identity(1, 1),
+(idProceso     Integer       Not Null,
+ Secuencia     Integer       Not Null,
  servidor      Sysname       Not Null,
  linkServer    Sysname       Not Null,
  actividad     Varchar(Max)  Not Null, 
@@ -22,7 +23,7 @@ Create Table dbo.logAnalisisLSTbl
  mensajeError  Varchar(250)  Not Null   Default '',
  informado     Tinyint       Not Null   Default 0,
 Constraint logAnalisisLSPk
-Primary Key (idProceso))
+Primary Key (idProceso, Secuencia))
 Go
 
 --
@@ -46,6 +47,16 @@ Exec sys.sp_addextendedproperty @name       = 'MS_Description',
                                 @level1name = 'logAnalisisLSTbl', 
                                 @level2type = 'Column',
                                 @level2name = 'idProceso'
+Go
+
+Exec sys.sp_addextendedproperty @name       = 'MS_Description', 
+                                @value      = 'Identificador de la Secuencia del Proceso de Análisis' , 
+                                @level0type = 'Schema',
+                                @level0name = 'dbo', 
+                                @level1type = 'Table',
+                                @level1name = 'logAnalisisLSTbl', 
+                                @level2type = 'Column',
+                                @level2name = 'secuencia'
 Go
 
 Exec sys.sp_addextendedproperty @name       = 'MS_Description', 

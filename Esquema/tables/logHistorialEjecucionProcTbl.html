@@ -74,6 +74,19 @@
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>logHistorialEjecucionProcTbl</h1><p><span id="recordNumber">0</span> rows</p><br />
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 id="Description" class="box-title">Description</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div><!-- /.box-header -->
+                        <div class="box-body clearfix">
+                            <p>Historial de Ejecuciones de Procedimientos.</p>
+                        </div><!-- /.box-body -->
+                    </div>
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -109,7 +122,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="secuencia">secuencia</span></td>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="secuencia">secuencia</span></td>
                                     <td>int identity</td>
                                     <td>4</td>
                                     <td title=''></td>
@@ -121,17 +134,12 @@
                                     </td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
-                                            <tr>
-                                                <td title="logHistorialEjecucionProcTbl.secuencia&#39;s name implies that it&#39;s a child of movLogControlCambiosTbl.secuencia, but it doesn&#39;t reference that column."><a href='movLogControlCambiosTbl.html'>movLogControlCambiosTbl</a><span class='relatedKey'>.secuencia</span></td>
-                                                <td class="constraint detail">Implied Constraint</td>
-                                                <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
-                                            </tr>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Identificador Correlativo del Proceso de Análisis.</p></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="baseDatos">baseDatos</span></td>
+                                    <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="baseDatos">baseDatos</span></td>
                                     <td>sysname</td>
                                     <td>256</td>
                                     <td title=''></td>
@@ -148,7 +156,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="procedimiento">procedimiento</span></td>
+                                    <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="procedimiento">procedimiento</span></td>
                                     <td>sysname</td>
                                     <td>256</td>
                                     <td title=''></td>
@@ -162,7 +170,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Nombre del Procedimiento Ejecutado.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="ultimaEjecucion">ultimaEjecucion</span></td>
@@ -179,7 +187,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Última Fecha de Ejecución del Procedimiento.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="fechaProcesoAnt">fechaProcesoAnt</span></td>
@@ -196,15 +204,15 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Fecha Anterior de Consulta de Ejecución.</p></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="fechaProcesoAct">fechaProcesoAct</span></td>
+                                    <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="fechaProcesoAct">fechaProcesoAct</span></td>
                                     <td>datetime</td>
                                     <td>16,3</td>
                                     <td title=''></td>
                                     <td title=''></td>
-                                    <td>null</td>
+                                    <td>(getdate())</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
@@ -213,7 +221,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Fecha Actual de Consulta de Ejecución.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="dias">dias</span></td>
@@ -230,7 +238,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Días de Análisis del Proceso.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="cantidad">cantidad</span></td>
@@ -238,7 +246,7 @@
                                     <td>4</td>
                                     <td title=''></td>
                                     <td title=''></td>
-                                    <td>null</td>
+                                    <td>((0))</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
@@ -247,7 +255,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Cantidad de ejecuciones del procedimiento durante el período analizado.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="tiempoMinimo">tiempoMinimo</span></td>
@@ -255,7 +263,7 @@
                                     <td>20,2</td>
                                     <td title=''></td>
                                     <td title=''></td>
-                                    <td>((0.00))</td>
+                                    <td>((0))</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
@@ -264,7 +272,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Tiempo Mínimo de ejecución del procedimiento en el período analizado</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="tiempoMaximo">tiempoMaximo</span></td>
@@ -272,7 +280,7 @@
                                     <td>20,2</td>
                                     <td title=''></td>
                                     <td title=''></td>
-                                    <td>((0.00))</td>
+                                    <td>((0))</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
@@ -281,11 +289,70 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Tiempo Máximo de ejecución del procedimiento en el período analizado</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="informado">informado</span></td>
+                                    <td>tinyint</td>
+                                    <td>1</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>((0))</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Estatus del envío del resulatado de la consulta del Proceso</p></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-sitemap"></i>
+                            <h3 id="Indexes" class="box-title">Indexes</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table
+                                    id="indexes_table"
+                                    class="table table-bordered table-striped dataTable"
+                                    role="grid"
+                                    data-paging="true"
+                                    data-page-length="10"
+                                    data-length-change="false">
+                                <thead>
+                                <tr>
+                                    <th>Constraint Name</th>
+                                    <th>Type</th>
+                                    <th>Sort</th>
+                                    <th>Column(s)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> logHistorialEjecucionProcPk</td>
+                                    <td>Primary key</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>secuencia</td>
+                                </tr>
+                                <tr>
+                                    <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> logHistorialEjecucionProcIdx01</td>
+                                    <td>Must be unique</td>
+                                    <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
+                                    <td>baseDatos + procedimiento + fechaProcesoAct</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div><!-- /.box-body -->
                     </div>
                     <div class="box box-primary">
                         <div class="box-header with-border">
@@ -301,31 +368,13 @@
                                 <h5>Close relationships within degrees of separation</h5>
                                 <ul class="nav nav-tabs pull-left ui-sortable-handle">
                                     <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>
-                                    <li class=""><a href="#oneimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">One implied</a></li>
-                                    <li class=""><a href="#twoimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two implied</a></li>
                                 </ul>
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="logHistorialEjecucionProcTbl.html" target="_top" title="logHistorialEjecucionProcTbl" alt="" coords="5,5,383,368">
+<area shape="rect" id="node1" href="logHistorialEjecucionProcTbl.html" target="_top" title="logHistorialEjecucionProcTbl" alt="" coords="5,5,383,397">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/logHistorialEjecucionProcTbl.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
-                                    </div>
-                                    <div class="chart tab-pane " id="oneimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
-                                        <map id="oneDegreeRelationshipsDiagramImplied" name="oneDegreeRelationshipsDiagramImplied">
-<area shape="rect" id="node1" href="logHistorialEjecucionProcTbl.html" target="_top" title="logHistorialEjecucionProcTbl" alt="" coords="332,5,709,368">
-<area shape="rect" id="node2" href="movLogControlCambiosTbl.html" target="_top" title="movLogControlCambiosTbl" alt="" coords="5,8,288,213">
-</map>
-                                        <a name='diagram'><img id="oneimpliedDegreeImg" src="../diagrams/tables/logHistorialEjecucionProcTbl.implied1degrees.png" usemap="#oneDegreeRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
-                                    </div>
-                                    <div class="chart tab-pane " id="twoimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
-                                        <map id="twoDegreesRelationshipsDiagramImplied" name="twoDegreesRelationshipsDiagramImplied">
-<area shape="rect" id="node1" href="logHistorialEjecucionProcTbl.html" target="_top" title="logHistorialEjecucionProcTbl" alt="" coords="600,5,977,368">
-<area shape="rect" id="node2" href="movLogControlCambiosTbl.html" target="_top" title="movLogControlCambiosTbl" alt="" coords="243,196,525,401">
-<area shape="rect" id="node3" href="segUsuariosTbl.html" target="_top" title="segUsuariosTbl" alt="" coords="5,228,199,316">
-<area shape="rect" id="node4" href="TmpHtml_38BCB31993D346069829683BD8D45B.html" target="_top" title="TmpHtml_38BCB31993D346069829683BD8D45B" alt="" coords="569,385,1008,473">
-</map>
-                                        <a name='diagram'><img id="twoimpliedDegreeImg" src="../diagrams/tables/logHistorialEjecucionProcTbl.implied2degrees.png" usemap="#twoDegreesRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
                                     </div>
                                 </div>
                             </div>

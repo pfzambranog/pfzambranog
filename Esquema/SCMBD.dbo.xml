@@ -41,6 +41,8 @@
          <column autoUpdated="false" defaultValue="null" digits="3" id="12" name="ultFechaEjecucion" nullable="true" remarks="Última fecha de ejecución del proceso." size="16" type="datetime" typeCode="93"/>
          <column autoUpdated="false" defaultValue="((1))" digits="0" id="13" name="idEstatus" nullable="false" remarks="Identificador del Estatus del Registro." size="1" type="bit" typeCode="-7"/>
          <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="14" name="fechaAct" nullable="false" remarks="Última Fecha de Actualización del Registro." size="16" type="datetime" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="procedimientoNotif" nullable="true" remarks="Procedimiento que notifica el resultado del proceso." size="256" type="sysname" typeCode="-9"/>
+         <column autoUpdated="false" defaultValue="null" digits="3" id="16" name="ultFechaNotifif" nullable="true" remarks="Última fecha de Notificación del proceso." size="16" type="datetime" typeCode="93"/>
          <primaryKey column="idProceso" sequenceNumberInPK="1"/>
          <index name="catControlProcesosPk" unique="true">
             <column ascending="true" name="idProceso"/>
@@ -70,7 +72,7 @@
             <column ascending="true" name="valor"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="catGeneralesTbl" numRows="41" remarks="Tabla de Variables Generales Aplicables a Tablas Especificas." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="catGeneralesTbl" numRows="43" remarks="Tabla de Variables Generales Aplicables a Tablas Especificas." schema="dbo" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="tabla" nullable="false" remarks="Nombre de la tabla a la cual se le van a referenciar las variables" size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="columna" nullable="false" remarks="Columna a la cual se le van a referenciar las variables" size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="valor" nullable="false" remarks="Valor de la variable" size="2" type="smallint" typeCode="5"/>
@@ -84,10 +86,12 @@
             <column ascending="true" name="valor"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="catMantenimentoTablasTbl" numRows="5" remarks="Catálogo de Tablas a ser depuradas." schema="dbo" type="TABLE">
-         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Mantenimiento" size="4" type="int identity" typeCode="4"/>
+      <table catalog="SCMBD" name="catMantenimentoTablasTbl" numRows="3" remarks="Catálogo de Tablas a ser depuradas." schema="dbo" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Mantenimiento" size="4" type="int identity" typeCode="4">
+            <child catalog="SCMBD" column="secuencia" foreignKey="logMantenimientoDepTablaFk01" implied="false" onDeleteCascade="true" schema="dbo" table="logMantenimientoDepTablaTbl"/>
+         </column>
          <column autoUpdated="false" defaultValue="(@@servername)" digits="0" id="1" name="servidor" nullable="false" remarks="Identificador del Servidor donde se realizó Proceso de Mantenimiento" size="256" type="sysname" typeCode="-9"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="baseDatos" nullable="false" remarks="Identificador de BD donde se realizará el Proceso de Mantenimiento" size="256" type="sysname" typeCode="-9"/>
+         <column autoUpdated="false" defaultValue="(db_name())" digits="0" id="2" name="baseDatos" nullable="false" remarks="Identificador de BD donde se realizará el Proceso de Mantenimiento" size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="tabla" nullable="false" remarks="Identificador de la entidad donde se realizará el Proceso de Mantenimiento" size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="((1))" digits="0" id="4" name="idTipoDep" nullable="false" remarks="Identificador del Tipo de Depuración Aplicacble a la Tabla." size="1" type="tinyint" typeCode="-6"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="campo" nullable="true" remarks="Columna de Comparación para el Proceso de Mantenimiento de la Tabla por Fecha." size="256" type="sysname" typeCode="-9"/>
@@ -102,7 +106,7 @@
             <column ascending="true" name="idProceso"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="catMensajesErroresTbl" numRows="175" remarks="CátaloGo Generales" schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="catMensajesErroresTbl" numRows="177" remarks="CátaloGo Generales" schema="dbo" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="idError" nullable="false" remarks="Identificador del Código de Error" size="4" type="int" typeCode="4">
             <child catalog="SCMBD" column="idError" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="dbo" table="LogErrorApiNotificacionesTbl"/>
             <child catalog="SCMBD" column="idError" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="dbo" table="tmpLogError"/>
@@ -135,13 +139,17 @@
             <column ascending="true" name="idMonitor"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="catObjetosExcepcionTbl" numRows="0" remarks="" schema="dbo" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="baseDatos" nullable="false" remarks="" size="256" type="sysname" typeCode="-9"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="objeto" nullable="false" remarks="" size="256" type="sysname" typeCode="-9"/>
-         <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="2" name="fechaAlta" nullable="false" remarks="" size="16" type="datetime" typeCode="93"/>
-         <primaryKey column="baseDatos" sequenceNumberInPK="1"/>
-         <primaryKey column="objeto" sequenceNumberInPK="2"/>
+      <table catalog="SCMBD" name="catObjetosExcepcionTbl" numRows="0" remarks="Catálogo de Objetos Exceptuados de Análisis" schema="dbo" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del  Objeto Exceptuado." size="4" type="int identity" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="baseDatos" nullable="false" remarks="Identificador de la base de datos que contiene el Objeto Exceptuado." size="256" type="sysname" typeCode="-9"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="tipo" nullable="false" remarks="Identificador del tipo de Objeto Exceptuado." size="2" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="objeto" nullable="false" remarks="Nombre del Objeto Exceptuado." size="256" type="sysname" typeCode="-9"/>
+         <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="4" name="fechaAlta" nullable="false" remarks="Fecha de alta del registro" size="16" type="datetime" typeCode="93"/>
+         <primaryKey column="idProceso" sequenceNumberInPK="1"/>
          <index name="catObjetosExcepcionPk" unique="true">
+            <column ascending="true" name="idProceso"/>
+         </index>
+         <index name="catObjetosExcepcionIdx01" unique="true">
             <column ascending="true" name="baseDatos"/>
             <column ascending="true" name="objeto"/>
          </index>
@@ -228,21 +236,22 @@
             <column ascending="true" name="idGrupo"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="conMotivosCorreoTbl" numRows="3" remarks="Catálogo de Configuración de Motivos de Emisión de Correos." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="conMotivosCorreoTbl" numRows="4" remarks="Catálogo de Configuración de Motivos de Emisión de Correos." schema="dbo" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="idMotivo" nullable="false" remarks="Código de Motivo de Emisión de Correo" size="2" type="smallint" typeCode="5">
             <child catalog="SCMBD" column="idMotivoCorreo" foreignKey="conProcedimientosCorreoFk01" implied="false" onDeleteCascade="false" schema="dbo" table="conProcedimientosCorreoTbl"/>
             <child catalog="SCMBD" column="idMotivoCorreo" foreignKey="conProcesosFk02" implied="false" onDeleteCascade="false" schema="dbo" table="conProcesosTbl"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="descripcion" nullable="true" remarks="Decripción Motivo de Emisión de Correo" size="100" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="titulo" nullable="true" remarks="Titulo del Correo" size="1000" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="cuerpo" nullable="true" remarks="Texto del Correo" size="8000" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="titulo" nullable="false" remarks="Titulo del Correo" size="1000" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="cuerpo" nullable="false" remarks="Texto del Correo" size="8000" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="URL" nullable="true" remarks="Dirección URL de Apoyo para Envío de Notificaciones" size="1000" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="idUsuarioAct" nullable="true" remarks="Identificador del Último Usuario que Actualizó el Registro" size="2" type="smallint" typeCode="5"/>
-         <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="6" name="fechaAct" nullable="true" remarks="Ultima fecha de actualiazción del Registro" size="16" type="datetime" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="idUsuarioAct" nullable="false" remarks="Identificador del Último Usuario que Actualizó el Registro" size="4" type="int" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="6" name="fechaAct" nullable="false" remarks="Ultima fecha de actualiazción del Registro" size="16" type="datetime" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="ipAct" nullable="true" remarks="Última Dirección IP desde Donde se Actualizo el Registro" size="30" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="macAddressAct" nullable="true" remarks="Última Dirección MAC desde Donde se Actualizo el Registro" size="30" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="((0))" digits="0" id="9" name="permiteCompartir" nullable="false" remarks="Bandera que Indica si el Motivo de Correo puede ser Compartido" size="1" type="bit" typeCode="-7"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="html" nullable="true" remarks="Texto del Correo  en Formato HTML" size="8000" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="perfilCorreo" nullable="false" remarks="Perfil de Correo Relacionado al Motivo de Correo" size="256" type="sysname" typeCode="-9"/>
          <primaryKey column="idMotivo" sequenceNumberInPK="1"/>
          <index name="conMotivosCorreoPk" unique="true">
             <column ascending="true" name="idMotivo"/>
@@ -321,7 +330,7 @@
             <column ascending="true" name="idProcedimiento"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="conProcesosTbl" numRows="50" remarks="Tabla de Control de Procesos y Emisión de Correos." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="conProcesosTbl" numRows="4" remarks="Tabla de Control de Procesos y Emisión de Correos." schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Único del Proceso." size="4" type="int identity" typeCode="4">
             <child catalog="SCMBD" column="idProceso" foreignKey="movDatosAdicionalesCorreoFk01" implied="false" onDeleteCascade="true" schema="dbo" table="movDatosAdicionalesCorreoTbl"/>
          </column>
@@ -349,7 +358,7 @@
          </index>
          <checkConstraint constraint="([idTipoNotificacion]&gt;=(0) AND [idTipoNotificacion]&lt;=(2))" name="conProcesosCk01"/>
       </table>
-      <table catalog="SCMBD" name="logAnalisisJobsTbl" numRows="7" remarks="Log de Análisis de Jobs con Errores en su Ejecución." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="logAnalisisJobsTbl" numRows="0" remarks="Log de Análisis de Jobs con Errores en su Ejecución." schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Análisis." size="4" type="int identity" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="servidor" nullable="false" remarks="Identificador del Servidor donde se realizó Proceso de Análisis." size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="Job" nullable="false" remarks="Identificador del Job que presento Problemas." size="256" type="sysname" typeCode="-9"/>
@@ -357,7 +366,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="nombrePaso" nullable="false" remarks="Nombre del Paso del Job que presento Problemas." size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="5" name="fechaInicio" nullable="false" remarks="Fecha de Ejecución del Job que presento Problemas" size="16" type="datetime" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="3" id="6" name="fechaTermino" nullable="true" remarks="Fecha de Ejecución de la Consulta a la Actividad de los Jobs" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="7" name="informado" nullable="false" remarks="Estatus que indica si fue notificado el evento de error." size="1" type="bit" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="7" name="informado" nullable="false" remarks="Estatus del Proceso de Información del Error Enconstrado" size="1" type="tinyint" typeCode="-6"/>
          <column autoUpdated="false" defaultValue="((0))" digits="0" id="8" name="error" nullable="false" remarks="Identificador del Error encontrado durante la Ejecución del Job" size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="('')" digits="0" id="9" name="mensajeError" nullable="false" remarks="Descripción del Error encontrado durante la Ejecución del Job" size="8000" type="nvarchar" typeCode="-9"/>
          <primaryKey column="idProceso" sequenceNumberInPK="1"/>
@@ -375,7 +384,7 @@
             <column ascending="true" name="fechaInicio"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="logAnalisisLSTbl" numRows="50" remarks="Log de Procesos de Análisis de Link Sever." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="logAnalisisLSTbl" numRows="57" remarks="Log de Procesos de Análisis de Link Sever." schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Análisis" size="4" type="int identity" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="servidor" nullable="false" remarks="Identificador del Servidor donde se realizó Proceso de Análisis LS" size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="linkServer" nullable="false" remarks="Identificador de donde se realizó Proceso de Análisis" size="256" type="sysname" typeCode="-9"/>
@@ -384,7 +393,7 @@
          <column autoUpdated="false" defaultValue="null" digits="3" id="5" name="fechaTermino" nullable="true" remarks="Fecha Termino  de la Actividad" size="16" type="datetime" typeCode="93"/>
          <column autoUpdated="false" defaultValue="((0))" digits="0" id="6" name="error" nullable="false" remarks="Identificador del Error encontrado durante el proceso" size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="('')" digits="0" id="7" name="mensajeError" nullable="false" remarks="Descripción del Error encontrado durante el proceso de Análisis" size="250" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="8" name="informado" nullable="false" remarks="Indica si fue reportada la incidencia de Objetos No Validos" size="1" type="tinyint" typeCode="-6"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="8" name="informado" nullable="false" remarks="Estatus del Proceso de Información del Error Enconstrado" size="1" type="tinyint" typeCode="-6"/>
          <primaryKey column="idProceso" sequenceNumberInPK="1"/>
          <index name="logAnalisisLSPk" unique="true">
             <column ascending="true" name="idProceso"/>
@@ -422,27 +431,35 @@
             <parent catalog="SCMBD" column="idError" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="dbo" table="catMensajesErroresTbl"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="mensajeError" nullable="false" remarks="Código del Error de la Ejecución de la API." size="250" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="6" name="informado" nullable="false" remarks="Indica si el Error fue informado." size="1" type="bit" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="informado" nullable="false" remarks="Indica si el Error fue informado." size="1" type="tinyint" typeCode="-6"/>
          <primaryKey column="idMovimiento" sequenceNumberInPK="1"/>
          <index name="LogErrorApiNotificacionesPk" unique="true">
             <column ascending="true" name="idMovimiento"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="logHistorialEjecucionProcTbl" numRows="0" remarks="" schema="dbo" type="TABLE">
-         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="secuencia" nullable="false" remarks="" size="4" type="int identity" typeCode="4">
-            <parent catalog="SCMBD" column="secuencia" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="dbo" table="movLogControlCambiosTbl"/>
-         </column>
+      <table catalog="SCMBD" name="logHistorialEjecucionProcTbl" numRows="0" remarks="Historial de Ejecuciones de Procedimientos." schema="dbo" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="secuencia" nullable="false" remarks="Identificador Correlativo del Proceso de Análisis." size="4" type="int identity" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="baseDatos" nullable="false" remarks="" size="256" type="sysname" typeCode="-9"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="procedimiento" nullable="false" remarks="" size="256" type="sysname" typeCode="-9"/>
-         <column autoUpdated="false" defaultValue="null" digits="3" id="3" name="ultimaEjecucion" nullable="false" remarks="" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="3" id="4" name="fechaProcesoAnt" nullable="false" remarks="" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="3" id="5" name="fechaProcesoAct" nullable="false" remarks="" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="6" name="dias" nullable="false" remarks="" size="4" type="int" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="cantidad" nullable="false" remarks="" size="4" type="int" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="((0.00))" digits="2" id="8" name="tiempoMinimo" nullable="false" remarks="" size="20" type="decimal" typeCode="3"/>
-         <column autoUpdated="false" defaultValue="((0.00))" digits="2" id="9" name="tiempoMaximo" nullable="false" remarks="" size="20" type="decimal" typeCode="3"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="procedimiento" nullable="false" remarks="Nombre del Procedimiento Ejecutado." size="256" type="sysname" typeCode="-9"/>
+         <column autoUpdated="false" defaultValue="null" digits="3" id="3" name="ultimaEjecucion" nullable="false" remarks="Última Fecha de Ejecución del Procedimiento." size="16" type="datetime" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="3" id="4" name="fechaProcesoAnt" nullable="false" remarks="Fecha Anterior de Consulta de Ejecución." size="16" type="datetime" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="5" name="fechaProcesoAct" nullable="false" remarks="Fecha Actual de Consulta de Ejecución." size="16" type="datetime" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="6" name="dias" nullable="false" remarks="Días de Análisis del Proceso." size="4" type="int" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="7" name="cantidad" nullable="false" remarks="Cantidad de ejecuciones del procedimiento durante el período analizado." size="4" type="int" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="2" id="8" name="tiempoMinimo" nullable="false" remarks="Tiempo Mínimo de ejecución del procedimiento en el período analizado" size="20" type="decimal" typeCode="3"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="2" id="9" name="tiempoMaximo" nullable="false" remarks="Tiempo Máximo de ejecución del procedimiento en el período analizado" size="20" type="decimal" typeCode="3"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="10" name="informado" nullable="false" remarks="Estatus del envío del resulatado de la consulta del Proceso" size="1" type="tinyint" typeCode="-6"/>
+         <primaryKey column="secuencia" sequenceNumberInPK="1"/>
+         <index name="logHistorialEjecucionProcPk" unique="true">
+            <column ascending="true" name="secuencia"/>
+         </index>
+         <index name="logHistorialEjecucionProcIdx01" unique="true">
+            <column ascending="true" name="baseDatos"/>
+            <column ascending="true" name="procedimiento"/>
+            <column ascending="true" name="fechaProcesoAct"/>
+         </index>
       </table>
-      <table catalog="SCMBD" name="logMantenimientoBDTbl" numRows="9" remarks="Log de Procesos de Mantenimiento de Base de Datos." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="logMantenimientoBDTbl" numRows="12" remarks="Log de Procesos de Mantenimiento de Base de Datos." schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Mantenimiento" size="4" type="int identity" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="servidor" nullable="false" remarks="Identificador del Servidor donde se realizó Proceso de Mantenimiento" size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="baseDatos" nullable="false" remarks="Identificador de donde se realizó Proceso de Mantenimiento" size="256" type="sysname" typeCode="-9"/>
@@ -456,50 +473,35 @@
             <column ascending="true" name="idProceso"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="logMantenimientoDepTablaTbl" numRows="0" remarks="Log de Procesos de Depuración de Información de tablas." schema="dbo" type="TABLE">
-         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Depuración" size="4" type="int identity" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="(@@servername)" digits="0" id="1" name="servidor" nullable="false" remarks="Identificador del Servidor donde se realizó Proceso de Depuración" size="256" type="sysname" typeCode="-9"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="baseDatos" nullable="false" remarks="Identificador de la Base de Datos donde se realizó Proceso de Depuración" size="256" type="sysname" typeCode="-9"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="tabla" nullable="false" remarks="Identificador de la Tabla donde se realizó Proceso de Depuración" size="256" type="sysname" typeCode="-9"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="4" name="registros" nullable="false" remarks="Número de Registros Depurados en la Tabla." size="4" type="int" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="5" name="fechaInicio" nullable="false" remarks="Fecha de Inicio de la Actividad" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="3" id="6" name="fechaTermino" nullable="true" remarks="Fecha Termino  de la Actividad" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="7" name="error" nullable="false" remarks="Identificador del Error encontrado durante el proceso" size="4" type="int" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="('')" digits="0" id="8" name="mensajeError" nullable="false" remarks="Descripción del Error encontrado durante el proceso de Depuración" size="250" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="9" name="informado" nullable="false" remarks="Estatus que indica si fue notificado el evento de error." size="1" type="bit" typeCode="-7"/>
+      <table catalog="SCMBD" name="logMantenimientoDepTablaTbl" numRows="6" remarks="Log de Procesos de Depuración de Información de tablas." schema="dbo" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Depuración" size="4" type="int" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="secuencia" nullable="false" remarks="Secuencia del Correlativo del Proceso de Depuración" size="4" type="int" typeCode="4">
+            <parent catalog="SCMBD" column="idProceso" foreignKey="logMantenimientoDepTablaFk01" implied="false" onDeleteCascade="true" schema="dbo" table="catMantenimentoTablasTbl"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(@@servername)" digits="0" id="2" name="servidor" nullable="false" remarks="Identificador del Servidor donde se realizó Proceso de Depuración" size="256" type="sysname" typeCode="-9"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="baseDatos" nullable="false" remarks="" size="256" type="sysname" typeCode="-9"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="tabla" nullable="false" remarks="Identificador de la Tabla donde se realizó Proceso de Depuración" size="256" type="sysname" typeCode="-9"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="5" name="registros" nullable="false" remarks="Número de Registros Depurados en la Tabla." size="4" type="int" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="6" name="fechaInicio" nullable="false" remarks="Fecha de Inicio de la Actividad" size="16" type="datetime" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="3" id="7" name="fechaTermino" nullable="true" remarks="Fecha Termino  de la Actividad" size="16" type="datetime" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="8" name="error" nullable="false" remarks="Identificador del Error encontrado durante el proceso" size="4" type="int" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="('')" digits="0" id="9" name="mensajeError" nullable="false" remarks="Descripción del Error encontrado durante el proceso de Depuración" size="250" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="10" name="informado" nullable="false" remarks="Estatus que indica si fue notificado el evento de error." size="1" type="tinyint" typeCode="-6"/>
          <primaryKey column="idProceso" sequenceNumberInPK="1"/>
+         <primaryKey column="secuencia" sequenceNumberInPK="2"/>
          <index name="logMantenimientoDepTablaPk" unique="true">
             <column ascending="true" name="idProceso"/>
+            <column ascending="true" name="secuencia"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="logMantenIndicesDetTbl" numRows="9457" remarks="Log Detallado de Proceso Mantenimiento de Índices." schema="dbo" type="TABLE">
-         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProcesoDet" nullable="false" remarks="Identificador Correlativo del Detalle de Proceso de Mantenimiento." size="4" type="int identity" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso Padre de Mantenimiento." size="4" type="int" typeCode="4">
-            <parent catalog="SCMBD" column="idProceso" foreignKey="logMantenIndicesDetFk01" implied="false" onDeleteCascade="true" schema="dbo" table="logMantenIndicesTbl"/>
-         </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="actividad" nullable="false" remarks="Descripción de la actividad." size="100" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="3" name="fechaInicio" nullable="false" remarks="Fecha de Inicio del Proceso de Mantenimiento" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="3" id="4" name="fechaTermino" nullable="true" remarks="Fecha Termino del Proceso de Mantenimiento" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="5" name="error" nullable="false" remarks="Identificador del Error encontrado durante el Proceso de Mantenimiento." size="4" type="int" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="('')" digits="0" id="6" name="mensajeError" nullable="false" remarks="Descripción del Error encontrado durante el Proceso de Mantenimiento." size="8000" type="nvarchar" typeCode="-9"/>
-         <primaryKey column="idProcesoDet" sequenceNumberInPK="1"/>
-         <index name="logMantenIndicesDetPk" unique="true">
-            <column ascending="true" name="idProcesoDet"/>
-         </index>
-         <index name="logMantenIndicesDetIdx01" unique="false">
-            <column ascending="true" name="idProceso"/>
-         </index>
-      </table>
-      <table catalog="SCMBD" name="logMantenIndicesTbl" numRows="16" remarks="Log de Proceso Mantenimiento de Índices." schema="dbo" type="TABLE">
-         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Mantenimiento." size="4" type="int identity" typeCode="4">
-            <child catalog="SCMBD" column="idProceso" foreignKey="logMantenIndicesDetFk01" implied="false" onDeleteCascade="true" schema="dbo" table="logMantenIndicesDetTbl"/>
-         </column>
+      <table catalog="SCMBD" name="logMantenIndicesTbl" numRows="1" remarks="Log de Proceso Mantenimiento de Índices." schema="dbo" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Mantenimiento." size="4" type="int identity" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="servidor" nullable="false" remarks="Identificador del Servidor donde se realizó Proceso de Mantenimiento." size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="basedatos" nullable="false" remarks="Nombre de la Base de Datos donde se realizó Proceso de Mantenimiento." size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="actividad" nullable="false" remarks="Descripción de la actividad." size="100" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="4" name="fechaInicio" nullable="false" remarks="Fecha de Inicio del Proceso de Mantenimiento" size="16" type="datetime" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="3" id="5" name="fechaTermino" nullable="true" remarks="Fecha Termino del Proceso de Mantenimiento" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="6" name="informado" nullable="false" remarks="Estatus que indica si fue notificado el Proceso de Mantenimiento." size="1" type="bit" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="6" name="informado" nullable="false" remarks="Estatus que indica si fue notificado el Proceso de Mantenimiento." size="1" type="tinyint" typeCode="-6"/>
          <column autoUpdated="false" defaultValue="((0))" digits="0" id="7" name="error" nullable="false" remarks="Identificador del Error encontrado durante el Proceso de Mantenimiento." size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="('')" digits="0" id="8" name="mensajeError" nullable="false" remarks="Descripción del Error encontrado durante el Proceso de Mantenimiento." size="8000" type="nvarchar" typeCode="-9"/>
          <primaryKey column="idProceso" sequenceNumberInPK="1"/>
@@ -516,7 +518,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="servidor" nullable="false" remarks="Identificador del Servidor Problemas de Consultas Bloqueadas." size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="databaseName" nullable="false" remarks="Identificador de la Base de Datos con Problemas de Consultas Bloqueadas." size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="sessionId" nullable="false" remarks="Identificador de la Sessión con Problemas de Consultas Bloqueadas." size="4" type="int" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="esource_type" nullable="false" remarks="Tipo de Objeto de Base de Datos Bloqueado" size="240" type="nvarchar" typeCode="-9"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="esource_type" nullable="false" remarks="" size="240" type="nvarchar" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="ObjectName" nullable="false" remarks="Identificador del Objeto Bloqueado por la Consulta." size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="resource_description" nullable="false" remarks="Descripción del Recurso donde se genera el Bloqueo." size="1024" type="nvarchar" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="request_session_id" nullable="true" remarks="Id de la Sesión donde se genera el Bloqueo." size="100" type="varchar" typeCode="12"/>
@@ -528,7 +530,7 @@
          <column autoUpdated="false" defaultValue="(getdate())" digits="0" id="13" name="fechaConsulta" nullable="false" remarks="Fecha de la Consulta a los procesos." size="6" type="date" typeCode="91"/>
          <column autoUpdated="false" defaultValue="(getdate())" digits="0" id="14" name="fechaInicio" nullable="false" remarks="Fecha y Hora de Inicio de la Consulta a los procesos" size="6" type="date" typeCode="91"/>
          <column autoUpdated="false" defaultValue="null" digits="3" id="15" name="fechaTermino" nullable="true" remarks="Fecha y Hora de Termino de la Consulta a los procesos." size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="16" name="informado" nullable="false" remarks="Indica si fue reportada la incidencia de Procesos Bloqueados." size="1" type="bit" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="16" name="informado" nullable="false" remarks="Indica si fue reportada la incidencia de Procesos Bloqueados." size="1" type="tinyint" typeCode="-6"/>
          <primaryKey column="idProceso" sequenceNumberInPK="1"/>
          <index name="logProcesosBloqueadosPk" unique="true">
             <column ascending="true" name="idProceso"/>
@@ -539,7 +541,7 @@
             <column ascending="true" name="sessionId"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="logProcesosEspacioDDTbl" numRows="0" remarks="Log de Análisis de Análisis de Espacio Disponible en DD." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="logProcesosEspacioDDTbl" numRows="1" remarks="Log de Análisis de Análisis de Espacio Disponible en DD." schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Análisis." size="4" type="int identity" typeCode="4"/>
          <column autoUpdated="false" defaultValue="(@@servername)" digits="0" id="1" name="servidor" nullable="false" remarks="Identificador del Servidor donde se realizó Proceso de Análisis." size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="2" name="fechaInicio" nullable="false" remarks="Fecha Inicio de Ejecución del Análisis" size="16" type="datetime" typeCode="93"/>
@@ -547,16 +549,12 @@
          <column autoUpdated="false" defaultValue="((0))" digits="2" id="4" name="totalEspacio" nullable="false" remarks="Espacio Total del Disco Duro." size="20" type="decimal" typeCode="3"/>
          <column autoUpdated="false" defaultValue="((0))" digits="2" id="5" name="totaldisponible" nullable="false" remarks="Espacio Disponible en Total del Disco Duro." size="20" type="decimal" typeCode="3"/>
          <column autoUpdated="false" defaultValue="((0))" digits="2" id="6" name="porcentajeDisponible" nullable="false" remarks="Porcentaje de Espacio Disponible en Total del Disco Duro." size="20" type="decimal" typeCode="3"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="7" name="informado" nullable="false" remarks="Estatus que indica si fue notificado el resultado del análisis" size="1" type="bit" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="7" name="informado" nullable="false" remarks="Estatus que indica si fue notificado el resultado del análisis" size="1" type="tinyint" typeCode="-6"/>
          <column autoUpdated="false" defaultValue="((0))" digits="0" id="8" name="error" nullable="false" remarks="Identificador del Error encontrado durante el análisis" size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="('')" digits="0" id="9" name="mensajeError" nullable="false" remarks="Descripción del Error encontrado durante la análisis" size="8000" type="nvarchar" typeCode="-9"/>
          <primaryKey column="idProceso" sequenceNumberInPK="1"/>
          <index name="logProcesosEspacioDDPk" unique="true">
             <column ascending="true" name="idProceso"/>
-         </index>
-         <index name="logProcesosEspacioDDIdex01" unique="false">
-            <column ascending="true" name="fechaTermino"/>
-            <column ascending="true" name="informado"/>
          </index>
       </table>
       <table catalog="SCMBD" name="logServiciosNotificacionesPushTbl" numRows="0" remarks="Log de Análisis de Servicios Notificaciones Push." schema="dbo" type="TABLE">
@@ -574,14 +572,14 @@
             <column ascending="true" name="idProceso"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="logServiciosNotificaCorreosTbl" numRows="4" remarks="Log de Análisis de Servicios Notificaciones de Correos" schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="logServiciosNotificaCorreosTbl" numRows="0" remarks="Log de Análisis de Servicios Notificaciones de Correos" schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Análisis" size="4" type="int identity" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="servidor" nullable="false" remarks="Identificador del Servidor donde se realizó Proceso de Análisis" size="256" type="sysname" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="idPerfilCorreo" nullable="false" remarks="Identificador del Perfil de Correos con Problemas" size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="descripcion" nullable="false" remarks="Perfil de Correo no Procesado" size="1020" type="nvarchar" typeCode="-9"/>
          <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="4" name="fechaInicio" nullable="false" remarks="Fecha de Inicio de la Actividad" size="16" type="datetime" typeCode="93"/>
          <column autoUpdated="false" defaultValue="(getdate())" digits="3" id="5" name="fechaTermino" nullable="true" remarks="Fecha Termino  de la Actividad" size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="6" name="informado" nullable="false" remarks="Identifica si el Análisis ya fue Informado." size="1" type="bit" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="6" name="informado" nullable="false" remarks="Identifica si el Análisis ya fue Informado." size="1" type="tinyint" typeCode="-6"/>
          <column autoUpdated="false" defaultValue="((0))" digits="0" id="7" name="error" nullable="false" remarks="Identificador del Error encontrado durante el proceso" size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="('')" digits="0" id="8" name="mensajeError" nullable="false" remarks="Descripción del Error encontrado durante el proceso de Análisis" size="250" type="varchar" typeCode="12"/>
          <primaryKey column="idProceso" sequenceNumberInPK="1"/>
@@ -589,7 +587,7 @@
             <column ascending="true" name="idProceso"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="logTiemposEjecucionTbl" numRows="15" remarks="Log de Análisis de Procesos de Tiempos de Ejecución." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="logTiemposEjecucionTbl" numRows="0" remarks="Log de Análisis de Procesos de Tiempos de Ejecución." schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Análisis." size="8" type="bigint identity" typeCode="-5"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="sessionId" nullable="false" remarks="Identificador de la Sessión con Problemas de Tiempos de Ejecución." size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="servidor" nullable="false" remarks="Identificador del Servidor Problemas de Tiempos de Ejecución." size="256" type="sysname" typeCode="-9"/>
@@ -603,7 +601,7 @@
          <column autoUpdated="false" defaultValue="(getdate())" digits="0" id="10" name="fechaConsulta" nullable="false" remarks="Fecha de la Consulta a los procesos." size="6" type="date" typeCode="91"/>
          <column autoUpdated="false" defaultValue="(getdate())" digits="0" id="11" name="fechaInicio" nullable="false" remarks="Fecha y Hora de Inicio de la Consulta a los procesos" size="6" type="date" typeCode="91"/>
          <column autoUpdated="false" defaultValue="null" digits="3" id="12" name="fechaTermino" nullable="true" remarks="Fecha y Hora de Termino de la Consulta a los procesos." size="16" type="datetime" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="13" name="informado" nullable="false" remarks="Indica si fue reportada la incidencia  de tiempos de ejecución." size="1" type="bit" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="13" name="informado" nullable="false" remarks="Indica si fue reportada la incidencia  de tiempos de ejecución." size="1" type="tinyint" typeCode="-6"/>
          <primaryKey column="idProceso" sequenceNumberInPK="1"/>
          <index name="logTiemposEjecucionPk" unique="true">
             <column ascending="true" name="idProceso"/>
@@ -627,7 +625,7 @@
             <column ascending="true" name="idProceso"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="movEnvioCorreosTbl" numRows="19" remarks="Tabla de Movimientos de Envío de Correos" schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="movEnvioCorreosTbl" numRows="35" remarks="Tabla de Movimientos de Envío de Correos" schema="dbo" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="mailitem_id" nullable="false" remarks="Identificador Único del Correo Enviado" size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="3" id="1" name="fechaEnvio" nullable="false" remarks="Fecha del Correo Enviado" size="16" type="datetime" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="idProceso" nullable="false" remarks="Identificador relacionado al Correo Enviado" size="4" type="int" typeCode="4"/>
@@ -647,9 +645,7 @@
          </index>
       </table>
       <table catalog="SCMBD" name="movLogControlCambiosTbl" numRows="0" remarks="Tabla Log de Movimientos de Control de Cambio." schema="dbo" type="TABLE">
-         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="secuencia" nullable="false" remarks="Identificador Único del Movimiento de Control de Cambio." size="4" type="int identity" typeCode="4">
-            <child catalog="SCMBD" column="secuencia" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="dbo" table="logHistorialEjecucionProcTbl"/>
-         </column>
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="secuencia" nullable="false" remarks="Identificador Único del Movimiento de Control de Cambio." size="4" type="int identity" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="idUsuario" nullable="false" remarks="Identificador del Usuario que solicita el Control de Cambio." size="4" type="int" typeCode="4">
             <parent catalog="SCMBD" column="idUsuario" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="dbo" table="segUsuariosTbl"/>
          </column>
@@ -660,7 +656,7 @@
          <column autoUpdated="false" defaultValue="((0))" digits="0" id="6" name="cantidadErrores" nullable="false" remarks="Cantidad de Objetos con Errores en el Control de Cambio." size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="('')" digits="0" id="7" name="idError" nullable="true" remarks="Identificador del Error Principal en el Control de Cambio." size="10" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="('')" digits="0" id="8" name="observaciones" nullable="true" remarks="Observaciones en el Control de Cambio." size="250" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="((0))" digits="0" id="9" name="informado" nullable="false" remarks="Indica si fue Informado el Resultado del Control de Cambio." size="1" type="bit" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="((0))" digits="0" id="9" name="informado" nullable="false" remarks="Indica si fue Informado el Resultado del Control de Cambio." size="1" type="tinyint" typeCode="-6"/>
          <primaryKey column="secuencia" sequenceNumberInPK="1"/>
          <index name="movLogControlCambiosPk" unique="true">
             <column ascending="true" name="secuencia"/>
@@ -672,9 +668,9 @@
          </index>
          <checkConstraint constraint="([tipoActualizacion]=(2) OR [tipoActualizacion]=(1))" name="movLogControlCambiosChk01"/>
       </table>
-      <table catalog="SCMBD" name="movLogMonitoresPushTbl" numRows="0" remarks="" schema="dbo" type="TABLE">
-         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idMovimiento" nullable="false" remarks="" size="8" type="bigint identity" typeCode="-5"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="idMonitor" nullable="false" remarks="" size="2" type="smallint" typeCode="5">
+      <table catalog="SCMBD" name="movLogMonitoresPushTbl" numRows="0" remarks="Tabla de movimientos de los Monitores Push" schema="dbo" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idMovimiento" nullable="false" remarks="Identificador de movimientos de los Monitores Push." size="8" type="bigint identity" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="idMonitor" nullable="false" remarks="Identificador del Monitor Push." size="2" type="smallint" typeCode="5">
             <parent catalog="SCMBD" column="idMonitor" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="dbo" table="catMonitoresPushTbl"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="idOrigen" nullable="false" remarks="" size="2" type="smallint" typeCode="5"/>
@@ -1910,21 +1906,6 @@ End]]></definition>
          <parameters>
             <parameter mode="IN" name="@PsCadena" type="varchar"/>
             <parameter mode="IN" name="@PnConsulta" type="numeric"/>
-            <parameter mode="INOUT" name="@PnEstatus" type="int"/>
-            <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
-         </parameters>
-      </routine>
-      <routine dataAccess="MODIFIES" deterministic="false" name="Sp_valida_longitud" type="PROCEDURE">
-         <comment><![CDATA[Procedimiento de Validación de la Longitud de un campo de una tabla determinada.]]></comment>
-         <definition language="SQL"/>
-         <parameters>
-            <parameter mode="IN" name="@PsTabla" type="nvarchar"/>
-            <parameter mode="IN" name="@PsColumna" type="nvarchar"/>
-            <parameter mode="INOUT" name="@PbAplica" type="bit"/>
-            <parameter mode="INOUT" name="@PsTipoCampo" type="varchar"/>
-            <parameter mode="INOUT" name="@PnLogitud" type="smallint"/>
-            <parameter mode="INOUT" name="@PnDecimales" type="smallint"/>
-            <parameter mode="INOUT" name="@PsRequerido" type="char"/>
             <parameter mode="INOUT" name="@PnEstatus" type="int"/>
             <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
          </parameters>
@@ -4725,7 +4706,6 @@ Fecha:       06/05/2022
       Insert into #TempJobs
       Execute ( @w_sql);
       Set @w_registros = @@Rowcount
-      Select @w_registros
     End Try
 
    Begin Catch
@@ -4748,7 +4728,8 @@ Fecha:       06/05/2022
           Return
        End
 
-    Select server]]></definition>
+    Select server         server,
+           sql_m]]></definition>
          <parameters>
             <parameter mode="IN" name="@PdFechaProceso" type="date"/>
             <parameter mode="INOUT" name="@PnEstatus" type="int"/>
@@ -5744,12 +5725,12 @@ Fecha:       06/05/2022
          <definition language="SQL"><![CDATA[/*
 Declare
    @w_idProceso           Integer      = 0,
-   @PnEstatus             Integer      = 0,  
+   @PnEstatus             Integer      = 0,
    @PsMensaje             Varchar(250) = Null;
 
 Begin
    Select @w_idProceso = Max(idProceso)
-   From   SMBDTI.dbo.logMantenimientoDepTablaTbl
+   From   dbo.logMantenimientoDepTablaTbl
 
    Execute Spp_MantenimientoDepuraTablas @PnEstatus = @PnEstatus Output,
                                          @PsMensaje = @PsMensaje Output
@@ -5760,40 +5741,57 @@ Begin
       End
 
    Select *
-   From   SMBDTI.dbo.logMantenimientoDepTablaTbl
+   From   dbo.logMantenimientoDepTablaTbl
    Where  idProceso > Isnull(@w_idProceso, 0)
 
    Return
 
 End
-Go 
+Go
 
 */
 
 Create   Procedure dbo.Spp_MantenimientoDepuraTablas
-  (@PnEstatus             Integer      = 0     Output,  
-   @PsMensaje             Varchar(250) = Null  Output)
+  (@PnEstatus              Integer      = 0     Output,
+   @PsMensaje              Varchar(250) = Null  Output)
 As
 
 Declare
-   @w_error             Integer,
-   @w_desc_error        Varchar(250),
-   @w_usuario           Varchar(Max),
-   @w_baseDatos         Sysname,
-   @w_tabla             Sysname,
-   @w_campo             Sysname,
-   @w_procedimiento     Sysname,
-   @w_sql               NVarchar(1500),
-   @w_param             NVarchar( 750),
-   @w_comilla           Char(1),
-   @w_fechaInicio       Datetime,
-   @w_fechaComp         Date,
-   @w_servidor          Sysname,
-   @w_dias              Integer,
-   @w_registros         Integer,
-   @w_idProceso         Integer,
-   @w_idProcesoLog      Integer,
-   @w_idUsuarioAct      Integer;
+   @w_error                Integer,
+   @w_desc_error           Varchar(  250),
+   @w_ambiente             Varchar(  250),
+   @w_incidencia           Varchar(  850),
+   @w_proceso              Varchar(  100),
+   @w_ip                   Varchar(   30),
+   @w_grupoCorreo          Varchar(   20),
+   @w_usuario              Varchar(  Max),
+   @w_parametros           Varchar(  Max),
+   @w_dbname               Sysname,
+   @w_baseDatos            Sysname,
+   @w_tabla                Sysname,
+   @w_tablalOG             Sysname,
+   @w_campo                Sysname,
+   @w_procedimiento        Sysname,
+   @w_servidor             Sysname,
+   @w_instancia            Sysname,
+   @w_query                Nvarchar( Max),
+   @w_sql                  NVarchar(1500),
+   @w_param                NVarchar( 750),
+   @w_comilla              Char(1),
+   @w_fechaInicio          Datetime,
+   @w_fechaAct             Datetime,
+   @w_fechaComp            Date,
+   @w_fechaProc            Date,
+   @w_idTipoNotificacion   Tinyint,
+   @w_idEstatus            Tinyint,
+   @w_secuencia            Integer,
+   @w_idAplicacion         Integer,
+   @w_idMotivoCorreo       Integer,
+   @w_dias                 Integer,
+   @w_registros            Integer,
+   @w_idProceso            Integer,
+   @w_idProcesoLog         Integer,
+   @w_idUsuarioAct         Integer;
 
 Declare
    C_DepPaso1 Cursor For
@@ -5827,57 +5825,32 @@ Programador: Pedro Felipe Zambrano
 Fecha:       06/05/2025
 
 */
+
    Set Nocount       On
    Set Xact_Abort    On
-   Set Ansi_Nulls    Off  
+   Set Ansi_Nulls    Off
 
 --
 -- Incializamos Variables
 --
-                         
-   Select @PnEstatus        = 0,
-          @PsMensaje        = Null,
-          @w_comilla        = Char(39),
-          @w_servidor       = @@ServerName;
 
-   Begin Try 
-      Update dbo.catControlProcesosTbl
-      Set    ultFechaEjecucion = Getdate()
-      Where  idProceso         = 13;
-   End Try
+   Select @PnEstatus            = 0,
+          @PsMensaje            = Null,
+          @w_comilla            = Char(39),
+          @w_servidor           = @@ServerName,
+          @w_instancia          = @@servicename,
+          @w_idMotivoCorreo     = 112,
+          @w_idAplicacion       = 27,
+          @w_secuencia          = 0,
+          @w_fechaAct           = Getdate(),
+          @w_fechaProc          = @w_fechaAct,
+          @w_dbname             = Db_name(),
+          @w_ip                 = dbo.Fn_buscaDireccionIP();
 
-   Begin Catch    
-      Select  @w_Error      = @@Error,    
-              @w_desc_error = Substring (Error_Message(), 1, 230)
-  
-   End   Catch    
- 
-   If IsNull(@w_Error, 0) <> 0    
-      Begin    
-         Select @PnEstatus = @w_Error,    
-                @PsMensaje = 'Error.: ' + Rtrim(Ltrim(Cast(@w_Error As Varchar))) + ' ' + @w_desc_error  
+   Select @w_ip = Replace(@w_ip, '(', ''),
+          @w_ip = Replace(@w_ip, ')', '');
 
-      End
-
-   Select @w_usuario = parametroChar        
-   From   dbo.conParametrosGralesTbl      
-   Where  idParametroGral = 8
-   
-   Select @w_sql   = 'Select @o_usuario = dbo.Fn_Desencripta_cadena(' + @w_usuario + ') ',        
-          @w_param = '@o_usuario Varchar(Max) Output '        
-   
-   Execute Sp_ExecuteSQL @w_sql, @w_param, @o_usuario = @w_usuario Output        
-   
-   Set @w_idUsuarioAct = Cast(@w_usuario As Integer) 
-
-   Open  C_DepPaso1
-   While @@Fetch_status < 1
-   Begin
-      Fetch C_DepPaso1 Into @w_idProceso, @w_baseDatos, @w_tabla, @w_campo, @w_dias
-      If @@Fetch_status != 0
-         Begin
-            Break
-         End]]></definition>
+   If @w_servidor like '%'+]]></definition>
          <parameters>
             <parameter mode="INOUT" name="@PnEstatus" type="int"/>
             <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
@@ -7001,8 +6974,151 @@ Fecha:       06/10/2025
             <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
          </parameters>
       </routine>
+      <routine dataAccess="MODIFIES" deterministic="false" name="Spp_analizaEjecucionProcedimientos" type="PROCEDURE">
+         <comment><![CDATA[Análisa las Ejecuciones de Procedimientos Compilados en Base de Datos Seleccionada.]]></comment>
+         <definition language="SQL"><![CDATA[/*
+
+Declare
+   @PsBaseDatos             Sysname      = 'SCMBD',
+   @PbGeneraNotificacion    Bit          = 0,
+   @PnEstatus               Integer      = 0,
+   @PsMensaje               Varchar(250);
+
+Begin
+   Execute dbo.Spp_analizaEjecucionProcedimientos @PsBaseDatos          = @PsBaseDatos,
+                                                  @PbGeneraNotificacion = @PbGeneraNotificacion,
+                                                  @PnEstatus            = @PnEstatus Output,
+                                                  @PsMensaje            = @PsMensaje Output;
+
+   If @PnEstatus != 0
+      Begin
+         Select @PnEstatus As Estatus, @PsMensaje As Mensaje
+     End
+
+   Return
+
+End
+Go
+*/
+
+Create   Procedure dbo.Spp_analizaEjecucionProcedimientos
+  (@PsBaseDatos             Sysname,
+   @PbGeneraNotificacion    Bit          = 0,
+   @PnEstatus               Integer      = 0    Output,
+   @PsMensaje               Varchar(250) = Null Output)
+As
+
+Declare
+   @w_error                 Integer,
+   @w_desc_error            Varchar(  250),
+   @w_usuario               Varchar(  250),
+   @w_codigoGrupoCorreo     Varchar(   20),
+   @w_parametros            Varchar(  Max),
+   @w_object                Sysname,
+   @w_baseDatos             Sysname,
+   @w_registros             Integer,
+   @w_idUsuarioAct          Integer,
+   @w_secuencia             Integer,
+   @w_dias                  Integer,
+   @w_idMotivoCorreo        Smallint,
+   @w_idEstatus             Tinyint,
+   @w_fechaProc             Date,
+   @w_fechaAct              Datetime,
+   @w_fechaProcesoAnt       Datetime,
+   @w_sql                   NVarchar( 1500),
+   @w_param                 NVarchar(  750),
+   @w_estado                NVarchar(  120);
+
+Declare
+   @w_tempObjetos  Table
+   (secuencia        Integer        Not Null Identity (1, 1) Primary Key,
+    baseDatos        Sysname        Not Null,
+    procedimiento    Sysname        Not Null,
+    ultimaEjecucion  Datetime       Not Null,
+    cantidad         Integer        Not Null,
+    tiempoMinimo     Decimal(18, 2) Not Null Default 0.00,
+    tiempoMaximo     Decimal(18, 2) Not Null Default 0.00)
+
+Begin
+
+/*
+
+Objetivo:    Análisis de Ejecuciones de Procedimientos Compilados en Base de Datos.
+Programador: Pedro Felipe Zambrano
+Fecha:       28/09/2025
+Versión:     1
+
+*/
+
+   Set Nocount       On
+   Set Xact_Abort    On
+   Set Ansi_Nulls    Off
+
+--
+-- Inicializamos Variables
+--
+
+   Select @PnEstatus            = 0,
+          @PsMensaje            = '',
+          @w_secuencia          = 0,
+          @w_idMotivoCorreo     = 111,
+          @w_baseDatos          = Db_name(),
+          @w_fechaAct           = Getdate();
+
+--
+-- Validación.
+--
+
+   Select @w_estado = state_desc
+   From   sys.databases
+   Where  name       = @PsBaseDatos
+   If @@Rowcount = 0
+      Begin
+         Select @PnEstatus  = 8000,
+                @PsMensaje  = dbo.Fn_Busca_MensajeError(@PnEstatus)
+
+         Goto Salida
+      End
+
+   If @w_estado != 'ONLINE'
+      Begin
+         Select @PnEstatus  = 8002,
+                @PsMensaje  = dbo.Fn_Busca_MensajeError(@PnEstatus)
+
+         Goto Salida
+      End
+--
+-- Búsqueda de Parámetros.
+--
+
+   Select @w_usuario = parametroChar
+   From   dbo.conParametrosGralesTbl
+   Where  idParametroGral = 17
+
+   Select @w_sql   = 'Select @o_usuario = dbo.Fn_Desencripta_cadena(' + @w_usuario + ') ',
+          @w_param = '@o_usuario Varchar(Max) Output '
+
+   Execute Sp_ExecuteSQL @w_sql, @w_param, @o_usuario = @w_usuario Output
+
+   Set @w_idUsuarioAct = Cast(@w_usuario As Smallint)
+
+    Insert Into @w_tempObjetos
+   (baseDatos,    procedimiento, ultimaEjecucion, cantidad,
+    tiempoMinimo, tiempoMaximo)
+    Select a.name,
+           object_name(object_id, d.database_id),
+           d.last_execution_time, d.execution_count,
+           Round(min_worker_time / 1000000.00, 2),
+           Round(max_worker_time]]></definition>
+         <parameters>
+            <parameter mode="IN" name="@PsBaseDatos" type="nvarchar"/>
+            <parameter mode="IN" name="@PbGeneraNotificacion" type="bit"/>
+            <parameter mode="INOUT" name="@PnEstatus" type="int"/>
+            <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
+         </parameters>
+      </routine>
       <routine dataAccess="MODIFIES" deterministic="false" name="Spp_calculaEspacioDD" type="PROCEDURE">
-         <comment/>
+         <comment><![CDATA[Consulta el Espacio de DD en el servidor de BD.]]></comment>
          <definition language="SQL"><![CDATA[/*
 Declare
    @PnEstatus               Integer      = 0,
@@ -7020,7 +7136,7 @@ End
 Go
 */
 
-Create   Procedure [dbo].[Spp_calculaEspacioDD]
+Create   Procedure dbo.Spp_calculaEspacioDD
   (@PnEstatus               Integer      = 0    Output,
    @PsMensaje               Varchar(250) = Null Output)
 As
@@ -7034,6 +7150,7 @@ Declare
    @w_idMotivoCorreo        Smallint,
    @w_idAplicacion          Smallint,
    @w_idTipoNotificacion    Tinyint,
+   @w_idEstatus             Tinyint,
    @w_tiempo                Integer,
    @w_idUsuarioAct          Integer,
    @w_grupoCorreo           Varchar(   20),
@@ -7055,6 +7172,8 @@ Declare
    @w_idProceso             Integer,
    @w_secuencia             Integer,
    @w_minimoDispo           Decimal(18, 2),
+   @w_totaldisponible       Varchar(20),
+   @w_porcentajeLibre       Varchar(20),
    @w_minutosEspera         Integer;
 
 Declare
@@ -7068,10 +7187,11 @@ Begin
 
 Objetivo:    Validación espacio disponible en disco duro.
 Programador: Pedro Felipe Zambrano
-Fecha:       08/09/2022
+Fecha:       08/09/2025
 Versión:     1
 
 */
+
    Set Nocount       On
    Set Xact_Abort    On
    Set Ansi_Nulls    Off
@@ -7090,8 +7210,12 @@ Versión:     1
           @w_secuencia          = 0,
           @w_fechaAct           = Getdate(),
           @w_dbname             = Db_name(),
-          @w_ip                 = Cast(Connectionproperty('local_net_address') As Varchar( 20)),
+          @w_ip                 = dbo.Fn_buscaDireccionIP(),
           @w_indice             = Substring('IDX_' + Replace(Cast(newid() As Varchar(100)), '-', ''), 1, 30);
+
+
+   Select @w_ip = Replace(@w_ip, '(', ''),
+          @w_ip = Replace(@w_ip, ')', '');
 
    If @w_server like '%'+ Char(92) + '%'
       Begin
@@ -7104,17 +7228,16 @@ Versión:     1
 
    Select @w_ambiente = Upper(parametroChar)
    From   dbo.conParametrosGralesTbl
-   Where  idParametroGral = 16
+   Where  idParametroGral = 24
    If @@Rowcount = 0
       Begin
          Set @w_ambiente = ''
       End
 
-   Set @w_server = Concat(@w_server, '/', @w_instancia, '/', @w_ambiente, '/',  @w_ip)
 
    Select @w_usuario = parametroChar
    From   dbo.conParametrosGralesTbl
-   Where  idParametroGral = 17
+   Where  idParametroGral = 8
 
    Select @w_sql   = 'Select @o_usuario = dbo.Fn_Desencripta_cadena(' + @w_usuario + ') ',
           @w_param = '@o_usuario Varchar(Max) Output '
@@ -7129,10 +7252,7 @@ Versión:     1
 
    Select @w_minimoDispo = parametroNumber
    From   dbo.conParametrosGralesTbl
-   Where  idParametroGral = 18
-   If @@Rowcount = 0
-      Begin
-         Set @w_minimoDispo = 10.00]]></definition>
+   Where  idParametr]]></definition>
          <parameters>
             <parameter mode="INOUT" name="@PnEstatus" type="int"/>
             <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
@@ -7518,19 +7638,162 @@ Versión:     1
             <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
          </parameters>
       </routine>
-      <routine dataAccess="MODIFIES" deterministic="false" name="Spp_reportaIncTiempoProc" type="PROCEDURE">
-         <comment><![CDATA[Proceso de Generación de Notificaciones por Incidencias de Tiempos de Proceso.]]></comment>
+      <routine dataAccess="MODIFIES" deterministic="false" name="Spp_notificaMantenimientoDepuraTablas" type="PROCEDURE">
+         <comment><![CDATA[Genera Notifición del Proceso de Depuración de Datos.]]></comment>
          <definition language="SQL"><![CDATA[/*
 
 Declare
-   @PnIdProceso                   Integer       = 2150801,
+   @PnIdProceso             Integer      = 0,
+   @PnIdUsuarioAct          Integer      = 18,
+   @PnEstatus               Integer      = 0,
+   @PsMensaje               Varchar(250);
+
+Begin
+   Execute Spp_notificaMantenimientoDepuraTablas @PnIdProceso    = @PnIdProceso,
+                                             @PnIdUsuarioAct = @PnIdUsuarioAct,
+                                             @PnEstatus      = @PnEstatus Output,
+                                             @PsMensaje      = @PsMensaje Output;
+
+   If @PnEstatus != 0
+      Begin
+         Select @PnEstatus As Estatus, @PsMensaje As Mensaje
+     End
+
+   Return
+
+End
+Go
+*/
+
+Create   Procedure Spp_notificaMantenimientoDepuraTablas
+  (@PnIdProceso                Integer,
+   @PnIdUsuarioAct             Integer,
+   @PnEstatus                  Integer      = 0    Output,
+   @PsMensaje                  Varchar(250) = Null Output)
+As
+
+Declare
+   @w_error                    Integer,
+   @w_desc_error               Varchar(  250),
+   @w_registros                Integer,
+   @w_secuencia                Integer,
+   @w_sql                      NVarchar( 1500),
+   @w_param                    NVarchar(  750),
+   @w_comilla                  Char(1),
+   @w_basedatos                Sysname,
+   @w_tablaLog                 Sysname,
+   @w_idProceso                Bigint,
+   @w_linea                    Integer,
+--
+   @w_idSession                Varchar(  64),
+   @w_idEstatus                Tinyint,
+   @w_idGrupo                  Integer,
+   @w_idMotivoCorreo           Integer,
+   @w_parametros               Varchar( Max),
+   @w_account_name             Sysname,
+   @w_grupoCorreo              Varchar(  20),
+   @w_idAplicacion             Integer,
+   @w_fechaProc                Date,
+   @w_fechaInicial             Date,
+   @w_ambiente                 Varchar(100),
+   @w_instancia                Sysname,
+--
+
+   @w_html                     Nvarchar( Max),
+
+--
+
+   @w_idAplicacionBD           Integer,
+   @w_idReceptor               Integer,
+   @w_aplicacion               Varchar(100),
+   @w_cuerpo                   Varchar(Max),
+   @w_body                     Varchar(Max),
+   @w_saludo                   Varchar(100),
+   @w_nombre                   Varchar(100),
+   @w_correo                   Varchar(100),
+   @w_asunto                   Varchar(250),
+   @w_ipOrigen                 Varchar( 30),
+   @w_server                   Sysname,
+   @w_servidorOrigen           Sysname,
+   @w_idCorreo                 Integer,
+   @w_registrosUser            Integer;
+
+
+Begin
+
+/*
+
+Objetivo:    Genera Notificación de las Objetos de la Base de Datos no Válidos.
+Programador: Pedro Felipe Zambrano
+Fecha:       31/10/2022
+Versión:     1
+
+
+*/
+
+   Set Nocount       On
+   Set Xact_Abort    On
+   Set Ansi_Nulls    Off
+
+--
+-- Inicializamos Variables
+--
+
+   Select @PnEstatus            = 0,
+          @PsMensaje            = '',
+          @w_comilla            = Char(39),
+          @w_secuencia          = 0,
+          @w_saludo             = '<p>' + dbo.Fn_calculaSaludo(),
+          @w_server             = @@Servername;
+
+--
+-- Búsqueda de Parámetros.
+--
+
+   Select @w_idSession          = idSession,
+          @w_idMotivoCorreo     = idMotivoCorreo,
+          @w_parametros         = parametros,
+          @w_idEstatus          = idEstatus
+   From   dbo.conProcesosTbl
+   Where  idProceso = @PnIdProceso
+   If @@Rowcount = 0
+      Begin
+         Select @PnEstatus = 3000,
+                @PsMensaje = dbo.Fn_Busca_MensajeError(@PnEstatus);
+
+         Set Xact_Abort Off
+         Return
+      End
+
+   If @w_idEstatus != 1
+      Begin
+         Select @PnEstatus = Case When @w_idEstatus = 2
+                                  Then 2999
+                                  Else 3004
+                             End,
+                @PsMensaje = dbo.Fn_Busca_MensajeError(@PnEstatus);
+
+         Set Xa]]></definition>
+         <parameters>
+            <parameter mode="IN" name="@PnIdProceso" type="int"/>
+            <parameter mode="IN" name="@PnIdUsuarioAct" type="int"/>
+            <parameter mode="INOUT" name="@PnEstatus" type="int"/>
+            <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
+         </parameters>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="false" name="Spp_reportaIncEspacioDD" type="PROCEDURE">
+         <comment><![CDATA[Generación de Notificaciones por Incidencias de Disponibilidad de Espacio libre en DD.]]></comment>
+         <definition language="SQL"><![CDATA[/*
+
+Declare
+   @PnIdProceso                   Integer       = 1,
    @PnEstatus                     Integer       = 0,
    @PsMensaje                     Varchar( 250) = '';
 
 Begin
-   Execute dbo.Spp_reportaIncTiempoProc @PnIdProceso = @PnIdProceso,
-                                        @PnEstatus   = @PnEstatus Output,
-                                        @PsMensaje   = @PsMensaje Output;
+   Execute dbo.Spp_reportaIncEspacioDD @PnIdProceso = @PnIdProceso,
+                                         @PnEstatus   = @PnEstatus Output,
+                                         @PsMensaje   = @PsMensaje Output;
 
    Select @PnEstatus, @PsMensaje
 
@@ -7541,7 +7804,7 @@ Go
 
 */
 
-Create    Procedure dbo.Spp_reportaIncTiempoProc
+Create   Procedure dbo.Spp_reportaIncEspacioDD
   (@PnIdProceso                   Integer       = 0,
    @PnIdUsuarioAct                Integer       = Null,
    @PnEstatus                     Integer       = 0  Output,
@@ -7588,7 +7851,6 @@ Declare
    @w_idProceso             Integer,
    @w_idEstatus             Tinyint,
    @w_idUsuarioAct          Integer,
-   @w_linea                 Integer,
    @w_idTipoNotificacion    Smallint,
    @w_idMotivoCorreo        Smallint,
    @w_idAplicacion          Smallint,
@@ -7596,7 +7858,8 @@ Declare
    @w_account_name          Sysname,
    @w_tabla                 Sysname,
    @w_objeto                Sysname,
-   @w_comilla               Char(1);
+   @w_totaldisponible       Varchar(80),
+   @w_porcentajeLibre       Varchar(80);
 
 Begin
 /*
@@ -7618,7 +7881,6 @@ Fecha:       05/05/2025
           @PsMensaje   = '',
           @w_registros = 0,
           @w_secuencia = 0,
-          @w_comilla   = Char(39),
           @w_saludo    = dbo.Fn_calculaSaludo();
 
    If @PnIdUsuarioAct Is Null
@@ -7645,7 +7907,148 @@ Fecha:       05/05/2025
 
    Create Table #TempGrupoReceptorCorreoDet
    (secuencia    Integer       Not Null Identity(1, 1) Primary Key,
-    idReceptor   In]]></definition>
+    idReceptor   Integer       Not Null)
+
+--
+-- Búsqu]]></definition>
+         <parameters>
+            <parameter mode="IN" name="@PnIdProceso" type="int"/>
+            <parameter mode="IN" name="@PnIdUsuarioAct" type="int"/>
+            <parameter mode="INOUT" name="@PnEstatus" type="int"/>
+            <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
+         </parameters>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="false" name="Spp_reportaIncTiempoProc" type="PROCEDURE">
+         <comment><![CDATA[Proceso de Generación de Notificaciones por Incidencias de Tiempos de Proceso.]]></comment>
+         <definition language="SQL"><![CDATA[/*
+
+Declare
+   @PnIdProceso                   Integer       = 2150801,
+   @PnEstatus                     Integer       = 0,
+   @PsMensaje                     Varchar( 250) = '';
+
+Begin
+   Execute dbo.Spp_reportaIncTiempoProc @PnIdProceso = @PnIdProceso,
+                                         @PnEstatus   = @PnEstatus Output,
+                                         @PsMensaje   = @PsMensaje Output;
+
+   Select @PnEstatus, @PsMensaje
+
+   Return
+
+End
+Go
+
+*/
+
+Create   Procedure dbo.Spp_reportaIncTiempoProc
+  (@PnIdProceso                   Integer       = 0,
+   @PnIdUsuarioAct                Integer       = Null,
+   @PnEstatus                     Integer       = 0  Output,
+   @PsMensaje                     Varchar( 250) = '' Output)
+
+As
+
+Declare
+   @w_Error                 Integer,
+   @w_desc_error            Varchar( 250),
+   @w_parametros            Varchar( Max),
+   @w_titulo                Varchar( 200),
+   @w_cuerpo                Varchar(1000),
+   @w_body                  Varchar(1000),
+   @w_body2                 Varchar(1000),
+   @w_body3                 Varchar(1000),
+   @w_html                  Varchar(8000),
+   @w_html2                 Varchar(8000),
+   @w_incidencia            Varchar( 250),
+   @w_servidor              Varchar( 100),
+   @w_grupoCorreo           Varchar(  20),
+   @w_ip                    Varchar(  30),
+   @w_correo                Varchar( 250),
+   @w_fechaProceso          Varchar(  10),
+   @w_saludo                Varchar( 100),
+   @w_nombre                Varchar( 100),
+   @w_idSession             Varchar(  30),
+   @w_url                   Varchar( 250),
+   @w_url2                  Varchar( 250),
+   @w_nota                  Varchar( 100),
+   @w_observacion1          Varchar( 250),
+   @w_observacion2          Varchar( 250),
+   @w_usuario               Varchar( Max),
+   @w_query                 Varchar(1000),
+   @w_ambiente              Varchar(  80),
+   @w_instancia             Varchar(  80),
+   @w_sql                   NVarchar(1500),
+   @w_param                 NVarchar( 750),
+   @w_idUsuario             Integer,
+   @w_idGrupo               Integer,
+   @w_registros             Integer,
+   @w_secuencia             Integer,
+   @w_mailitem_id           Integer,
+   @w_idProceso             Integer,
+   @w_idEstatus             Tinyint,
+   @w_idUsuarioAct          Integer,
+   @w_idTipoNotificacion    Smallint,
+   @w_idMotivoCorreo        Smallint,
+   @w_idAplicacion          Smallint,
+   @w_fechaAct              Datetime,
+   @w_account_name          Sysname,
+   @w_tabla                 Sysname,
+   @w_objeto                Sysname;
+
+Begin
+/*
+
+Objetivo:    Generación de Notificaciones por Incidencias en Tiempos de Proceso.
+Programador: Pedro Felipe Zambrano
+Fecha:       05/05/2025
+
+
+*/
+
+   Set Nocount       On
+   Set Xact_Abort    On
+   Set Ansi_Nulls    On
+   Set Ansi_Warnings On
+   Set Ansi_Padding  On
+
+   Select @PnEstatus   = 0,
+          @PsMensaje   = '',
+          @w_registros = 0,
+          @w_secuencia = 0,
+          @w_saludo    = dbo.Fn_calculaSaludo();
+
+   If @PnIdUsuarioAct Is Null
+      Begin
+         Select @w_usuario = parametroChar
+         From   dbo.conParametrosGralesTbl
+         Where  idParametroGral = 8
+
+         Select @w_sql   = 'Select @o_usuario = dbo.Fn_Desencripta_cadena(' + @w_usuario + ') ',
+                @w_param = '@o_usuario Varchar(Max) Output '
+
+         Execute Sp_ExecuteSQL @w_sql, @w_param, @o_usuario = @w_usuario Output
+
+         Set @w_idUsuarioAct = Cast(@w_usuario As Smallint)
+      End
+   Else
+      Begin
+         Set @w_idUsuarioAct = @PnIdUsuarioAct
+      End
+
+--
+-- Generación de Tabla Temporal
+--
+
+   Create Table #TempGrupoReceptorCorreoDet
+   (secuencia    Integer       Not Null Identity(1, 1) Primary Key,
+    idReceptor   Integer       Not Null)
+
+--
+-- Búsqueda de Parametros
+--
+
+   Select @w_idSession          = idSession,]]></definition>
          <parameters>
             <parameter mode="IN" name="@PnIdProceso" type="int"/>
             <parameter mode="IN" name="@PnIdUsuarioAct" type="int"/>

@@ -16,7 +16,7 @@ schemaspy.host=127.0.0.1
 schemaspy.port=1433
 schemaspy.db=SCMBD
 schemaspy.u=sa
-schemaspy.p=Pedro
+schemaspy.p=Yape2025
 
 # output dir to save generated files
 

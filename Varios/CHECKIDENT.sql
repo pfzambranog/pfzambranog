@@ -1,0 +1,1 @@
+DBCC CHECKIDENT  (conProcesosTbl, RESEED, 1)

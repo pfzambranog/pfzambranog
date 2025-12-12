@@ -19,7 +19,7 @@ Create Table dbo.logAnalisisJobsTbl
  nombrePaso        Sysname         Not Null, 
  fechaInicio       DateTime        Not Null Default GetDate(),
  fechaTermino      Datetime            Null,
- informado         Tinyint             Not Null   Default 0,
+ informado         Tinyint         Not Null   Default 0,
  error             Integer         Not Null   Default 0,
  mensajeError      Nvarchar(4000)  Not Null   Default '',
 Constraint logAnalisisJobsPk

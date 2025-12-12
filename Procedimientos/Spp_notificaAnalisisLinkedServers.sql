@@ -11,10 +11,10 @@ Declare
    @PsMensaje               Varchar(250);
 
 Begin
-   Execute Spp_notificaAnalisisEjecucionProc @PnIdProceso    = @PnIdProceso,
-                                             @PnIdUsuarioAct = @PnIdUsuarioAct,
-                                             @PnEstatus      = @PnEstatus Output,
-                                             @PsMensaje      = @PsMensaje Output;
+   Execute dbo.Spp_notificaAnalisisLinkedServers @PnIdProceso    = @PnIdProceso,
+                                                 @PnIdUsuarioAct = @PnIdUsuarioAct,
+                                                 @PnEstatus      = @PnEstatus Output,
+                                                 @PsMensaje      = @PsMensaje Output;
 
    If @PnEstatus != 0
       Begin
@@ -27,7 +27,7 @@ End
 Go
 */
 
-Create Or Alter Procedure Spp_notificaAnalisisEjecucionProc
+Create Or Alter Procedure dbo.Spp_notificaAnalisisLinkedServers
   (@PnIdProceso             Integer,
    @PnIdUsuarioAct          Integer,
    @PnEstatus               Integer      = 0    Output,
@@ -53,7 +53,6 @@ Declare
    @w_account_name             Sysname,
    @w_grupoCorreo              Varchar(  20),
    @w_idAplicacion             Integer,
-   @w_fechaProc                Date,
    @w_fechaInicial             Date,
    @w_fechaTermino             Date,
 --
@@ -66,6 +65,7 @@ Declare
    @w_archivoXML               Xml,
    @w_cadenaEncriptada         Varchar(4000),
    @w_URL                      Varchar( 750),
+   @w_incidencia               Varchar( 250),
 --
    @w_procedimiento            Sysname,
    @w_ultimaEjecucion          Datetime,
@@ -104,7 +104,7 @@ Declare
 
 Begin
 
--- Objetivo:    Genera Notificación de las Estadisticas de Ejecuciones de Procedimientos Compilados en Base de Datos en un Período.
+-- Objetivo:    Genera Notificación de Problemas de conexión de los Linked Server.
 -- Programador: Pedro Felipe Zambrano
 -- Fecha:       31/10/2025
 -- Versión:     1
@@ -129,14 +129,15 @@ Begin
 -- Creación de Tablas Temporales.
 --
 
-   Create Table   #tempObjetos
-   (secuencia                 Integer        Not Null Identity (1, 1) Primary Key,
-    baseDatos                 Sysname        Not Null,
-    procedimiento             Sysname        Not Null,
-    ultimaEjecucion           Date           Not Null,
-    cantidadEjecuciones       Integer        Not Null,
-    tiempoMinimoEjecucion     Decimal(18, 2) Not Null Default 0.00,
-    tiempoMaximoEjecucion     Decimal(18, 2) Not Null Default 0.00)
+   Create Table   #tempLinkServer
+   (secuencia                 Integer        Not Null,
+    servidor                  Sysname        Not Null,
+    linkServer                Sysname        Not Null,
+    actividad                 Varchar(Max)   Not Null,
+    fechaInicio               Datetime       Not Null,
+    fechaTermino              Datetime           Null,
+    error                     Integer        Not Null,
+    mensajeError              Varchar(250)   Not Null)
 
 --
 -- Búsqueda de Parámetros.
@@ -144,7 +145,8 @@ Begin
 
    Select @w_idSession          = idSession,
           @w_idMotivoCorreo     = idMotivoCorreo,
-          @w_parametros         = parametros
+          @w_parametros         = parametros,
+          @w_idEstatus          = idEstatus
    From   dbo.conProcesosTbl
    Where  idProceso = @PnIdProceso
    If @@Rowcount = 0
@@ -169,7 +171,9 @@ Begin
       End
 
    Select  @w_account_name = perfilCorreo,
-           @w_cuerpo       = html
+           @w_cuerpo       = html,
+           @w_asunto       = descripcion,
+           @w_URL          = URL
    From    dbo.conMotivosCorreoTbl
    Where   idMotivo   = @w_idMotivoCorreo
    If @@Rowcount = 0
@@ -202,11 +206,10 @@ Begin
              @w_ambiente        = dbo.Fn_splitStringColumna(@w_parametros, '|',  5),
              @w_basedatos       = dbo.Fn_splitStringColumna(@w_parametros, '|',  6),
              @w_idAplicacion    = dbo.Fn_splitStringColumna(@w_parametros, '|',  7),
-             @w_asunto          = dbo.Fn_splitStringColumna(@w_parametros, '|',  8),
-             @w_tablaLog        = dbo.Fn_splitStringColumna(@w_parametros, '|',  9),
-             @w_idProceso       = dbo.Fn_splitStringColumna(@w_parametros, '|', 10),
-             @w_fechaProc       = Getdate(),
-             @w_fechaInicial    = DateAdd(dd, -6, @w_fechaProc);
+             @w_incidencia      = dbo.Fn_splitStringColumna(@w_parametros, '|',  8),
+             @w_idProceso       = dbo.Fn_splitStringColumna(@w_parametros, '|',  9),
+             @w_tablaLog        = dbo.Fn_splitStringColumna(@w_parametros, '|', 10),
+             @w_registros       = dbo.Fn_splitStringColumna(@w_parametros, '|', 11);
 
   End Try
 
@@ -219,6 +222,14 @@ Begin
    If Isnull(@w_Error, 0) <> 0
       Begin
          Select @PnEstatus = @w_Error,
+                @PsMensaje = Concat('Error en Linea ', @w_linea, ' ', ltrim(@w_Error), ' ', @w_desc_error);
+
+         Goto Salida
+      End
+
+   If Isnull(@w_registros, 0) = 0
+      Begin
+         Select @PnEstatus = 98,
                 @PsMensaje = Concat('Error en Linea ', @w_linea, ' ', ltrim(@w_Error), ' ', @w_desc_error);
 
          Goto Salida
@@ -326,29 +337,22 @@ Begin
 
 --
 
-   Insert Into #tempObjetos
-   (baseDatos,              procedimiento,        ultimaEjecucion, cantidadEjecuciones,
-    tiempoMinimoEjecucion,  tiempoMaximoEjecucion)
-   Select baseDatos,          procedimiento,     Max(ultimaEjecucion), Sum(cantidad),
-          Max(tiempoMinimo),  Max(tiempoMaximo)
-   From   dbo.logHistorialEjecucionProcTbl a
+   Insert Into #tempLinkServer
+   (secuencia,   servidor,     linkServer, actividad,
+    fechaInicio, fechaTermino, error,      mensajeError)
+   Select secuencia,   servidor,     linkServer, actividad,
+          fechaInicio, fechaTermino, error,      mensajeError
+   From   dbo.logAnalisisLSTbl a
    Where  informado   = 1
-   And    Not Exists ( Select Top 1 1
-                       From   dbo.catObjetosExcepcionTbl
-                       Where  baseDatos    = a.baseDatos
-                       And    objeto       = a.procedimiento)
-   Group  By baseDatos,  procedimiento;
+   And    idProceso   = @w_idProceso;
+
    Select @w_secuencia = 0,
-          @w_registros = @@Identity
+          @w_registros = @@Rowcount;
 
 
-   Select  @w_fechaInicial = Min(fechaProcesoAnt), @w_fechaTermino = Max(fechaProcesoAct)
-   From    dbo.logHistorialEjecucionProcTbl a
-   Where   informado   = 1
-   And     Not Exists  ( Select Top 1 1
-                         From   dbo.catObjetosExcepcionTbl
-                         Where  baseDatos    = a.baseDatos
-                         And    objeto       = a.procedimiento)
+   Select  @w_fechaInicial = Min(fechaInicio), @w_fechaTermino = Max(fechaTermino)
+   From    #tempLinkServer;
+
 --
 -- Construcción del correo
 --
@@ -361,37 +365,14 @@ Begin
           @w_cuerpo = Replace(@w_cuerpo, '&BaseDatos&',     @w_basedatos),
           @w_cuerpo = Replace(@w_cuerpo, '&ambiente&',      @w_ambiente),
           @w_cuerpo = Replace(@w_cuerpo, '&t_tabla&',       @w_tablalOG),
-          @w_cuerpo = Replace(@w_cuerpo, '&fechaInicial&',  Convert(Char(10), @w_fechaInicial, 103)),
-          @w_cuerpo = Replace(@w_cuerpo, '&fechaFinal&',    Convert(Char(10), @w_fechaTermino, 103)),
-          @w_cuerpo = Replace(@w_cuerpo, '&proceso&',       @w_asunto);
+          @w_cuerpo = Replace(@w_cuerpo, '&proceso&',       @w_incidencia),
+          @w_cuerpo = Replace(@w_cuerpo, '&idproceso&',     @w_idProceso);
 
-   Set @w_sql = 'Select Top 10 baseDatos "Base de Datos", procedimiento "Objeto", ' +
-                        'Convert(Char(10), ultimaEjecucion, 103) "Última Ejecución",  ' +
-                        'cantidadEjecuciones "Cantidad de Ejecuciones", tiempoMinimoEjecucion "Tiempo Mínimo de Ejecución",' +
-                        'tiempoMaximoEjecucion "Tiempo Máximo de Ejecución" '          +
-                'From   #tempObjetos
-                 Order by 4 desc '
 
-   Execute dbo.Spp_ProcesaConsultaHtmlTable @PsConsulta   = @w_sql,
-                                            @PsOrdenPres  = ' ',
-                                            @PsHTML       = @w_html    Output,
-                                            @PnEstatus    = @PnEstatus Output,
-                                            @PsMensaje    = @PsMensaje Output;
-
-   If @PnEstatus != 0
-      Begin
-         Goto Salida
-      End
---
-
-   Set  @w_cuerpo = Replace(@w_cuerpo, '&tabla1&',  @w_html)
-
-   Set @w_sql = 'Select Top 10 baseDatos "Base de Datos", procedimiento "Objeto", ' +
-                        'Convert(Char(10), ultimaEjecucion, 103) "Última Ejecución",  ' +
-                        'cantidadEjecuciones "Cantidad de Ejecuciones", tiempoMinimoEjecucion "Tiempo Mínimo de Ejecución",' +
-                        'tiempoMaximoEjecucion "Tiempo Máximo de Ejecución" '          +
-                'From   #tempObjetos
-                 Order by 5 desc '
+   Set @w_sql = Concat('Select Top 10 servidor "Servidor Destino", linkServer "Linked Server", ',
+                              'fechaTermino "Fecha Proceso", error "Código Error",   mensajeError "Mensaje Error" ',
+                       'From   #tempLinkServer ',
+                       'Order by secuencia ')
 
    Execute dbo.Spp_ProcesaConsultaHtmlTable @PsConsulta   = @w_sql,
                                             @PsOrdenPres  = ' ',
@@ -404,28 +385,7 @@ Begin
          Goto Salida
       End
 
-   Set  @w_cuerpo = Replace(@w_cuerpo, '&tabla2&',  @w_html)
-
-   Set @w_sql = 'Select Top 10 baseDatos "Base de Datos", procedimiento "Objeto", ' +
-                        'Convert(Char(10), ultimaEjecucion, 103) "Última Ejecución",  ' +
-                        'cantidadEjecuciones "Cantidad de Ejecuciones", tiempoMinimoEjecucion "Tiempo Mínimo de Ejecución",' +
-                        'tiempoMaximoEjecucion "Tiempo Máximo de Ejecución" '          +
-                'From   #tempObjetos
-                 Order by 6 desc '
-
-   Execute dbo.Spp_ProcesaConsultaHtmlTable @PsConsulta   = @w_sql,
-                                            @PsOrdenPres  = ' ',
-                                            @PsHTML       = @w_html    Output,
-                                            @PnEstatus    = @PnEstatus Output,
-                                            @PsMensaje    = @PsMensaje Output;
-
-   If @PnEstatus != 0
-      Begin
-         Goto Salida
-      End
-
-   Set  @w_cuerpo = Replace(@w_cuerpo, '&tabla3&',  @w_html)
-
+   Set @w_cuerpo = Replace(@w_cuerpo, '&tabla2&',     @w_html)
 --
    Set @w_secuencia = 0
 
@@ -513,16 +473,16 @@ Salida:
                 tiempoProceso       = Datediff(ss, fechaInicio, Getdate())
          Where  idProceso           = @PnIdProceso;
 
-        Update dbo.logHistorialEjecucionProcTbl
+        Update dbo.logAnalisisLSTbl
         Set    informado       = 2,
-               fechaProcesoAct = Getdate()
-        From   dbo.logHistorialEjecucionProcTbl a
-        Where  idProceso = @w_idProceso;
+               fechaTermino = Getdate()
+        From   dbo.logAnalisisLSTbl a
+        Where  informado   = 1
+        And    idProceso   = @w_idProceso;
 
         Update dbo.catControlProcesosTbl
         Set    ultFechaNotifif = Getdate()
-        Where  idProceso = 6;
-        
+        Where  idProceso = 11
       End
 
 --
@@ -536,8 +496,8 @@ Go
 --
 
 Declare
-   @w_valor          Nvarchar(250) = 'Consulta a las Ejecuciones de Procedimientos de Base de Datos.',
-   @w_procedimiento  NVarchar(250) = 'Spp_notificaAnalisisEjecucionProc';
+   @w_valor          Nvarchar(250) = 'Genera Notificación de Problemas de conexión de los Linked Server.',
+   @w_procedimiento  NVarchar(250) = 'Spp_notificaAnalisisLinkedServers';
 
 If Not Exists (Select Top 1 1
                From   sys.extended_properties a

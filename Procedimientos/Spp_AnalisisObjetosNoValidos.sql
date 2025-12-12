@@ -257,7 +257,7 @@ Begin
                                      @PnIdUsuarioAct       = @w_idUsuarioAct,
                                      @PnEstatus            = @PnEstatus  Output,
                                      @PsMensaje            = @PsMensaje  Output;
-      If @PnEstatus != 0
+      If @PnEstatus = 0
          Begin
             Update dbo.logAnalisisObjetosNoValidosTbl
             Set    fechaTermino = Getdate(),

@@ -11,7 +11,7 @@ Declare
    @PsMensaje               Varchar(250);
 
 Begin
-   Execute Spp_notificaAnalisisEjecucionProc @PnIdProceso    = @PnIdProceso,
+   Execute dbo.spp_notificaObjetosNoValidos @PnIdProceso    = @PnIdProceso,
                                              @PnIdUsuarioAct = @PnIdUsuarioAct,
                                              @PnEstatus      = @PnEstatus Output,
                                              @PsMensaje      = @PsMensaje Output;
@@ -27,7 +27,7 @@ End
 Go
 */
 
-Create Or Alter Procedure Spp_notificaAnalisisEjecucionProc
+Create Or Alter Procedure dbo.spp_notificaObjetosNoValidos
   (@PnIdProceso                Integer,
    @PnIdUsuarioAct             Integer,
    @PnEstatus                  Integer      = 0    Output,
@@ -87,7 +87,7 @@ Begin
 
 Objetivo:    Genera Notificación de las Objetos de la Base de Datos no Válidos.
 Programador: Pedro Felipe Zambrano
-Fecha:       31/10/2022
+Fecha:       31/10/2025
 Versión:     1
 
 
@@ -620,8 +620,8 @@ Go
 --
 
 Declare
-   @w_valor          Nvarchar(250) = 'Consulta a las Ejecuciones de Procedimientos Compilados en Base de Datos Seleccionada.',
-   @w_procedimiento  NVarchar(250) = 'Spp_notificaAnalisisEjecucionProc';
+   @w_valor          Nvarchar(250) = 'Genera Notificación de las Objetos de la Base de Datos no Válidos.',
+   @w_procedimiento  NVarchar(250) = 'spp_notificaObjetosNoValidos';
 
 If Not Exists (Select Top 1 1
                From   sys.extended_properties a

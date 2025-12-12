@@ -24,9 +24,8 @@ Go
 */
 
 Create Or Alter Procedure dbo.Spp_AnalisisLinkServer
-  (@PsTabla        Sysname      = Null,
-   @PnEstatus      Integer      = Null Output,
-   @PsMensaje      Varchar(250) = Null Output)
+  (@PnEstatus               Integer      = Null Output,
+   @PsMensaje               Varchar(250) = Null Output)
 As
 
 Declare
@@ -36,22 +35,24 @@ Declare
    @w_param                 Nvarchar( 750),
    @w_error                 Integer,
    @w_desc_error            Varchar(  250),
-   @w_idProceso             Integer,
    @w_registros             Integer,
+   @w_insert                Integer,
    @w_minutosEspera         Integer,
    @w_salida                Integer,
-   @w_existe                Tinyint,
+   @w_idProceso             Integer,
    @w_secuencia             Integer,
-   @w_servidor              Sysname,
+   @w_idMotivoCorreo        Integer,
+   @w_idUsuarioAct          Integer,
+   @w_linea                 Integer,
    @w_tabla                 Sysname,
    @w_tablaLog              Sysname,
    @w_dbname                Sysname,
    @w_instancia             Sysname,
    @w_base                  Sysname,
    @w_objeto                Sysname,
+   @w_periodicidad          Varchar(   60),
    @w_server                Varchar(  100),
    @w_usuario               Varchar(  Max),
-   @w_idMotivoCorreo        Smallint,
    @w_idAplicacion          Smallint,
    @w_idTipoNotificacion    Tinyint,
    @w_grupoCorreo           Varchar(   20),
@@ -61,10 +62,8 @@ Declare
    @w_proceso               Varchar(  100),
    @w_ip                    Varchar(   30),
    @w_query                 Varchar( 1000),
-   @w_idUsuarioAct          Integer,
-   @w_linea                 Integer,
-   @w_fechaAct              Datetime;
-
+   @w_fechaAct              Datetime,
+   @w_idEstatus             Tinyint;
 
 Begin
 /*
@@ -81,19 +80,28 @@ Fecha:       05/05/2025
    Set Ansi_Nulls    On
 
    Select @PnEstatus            = 0,
+          @w_registros          = 0,
+          @w_secuencia          = 0,
+          @w_insert             = 0,
           @PsMensaje            = Null,
           @w_tabla              = 'sysobjects',
           @w_baseDatos          = 'tempdb',
-          @w_registros          = 0,
           @w_server             = @@ServerName,
           @w_instancia          = @@servicename,
-          @w_idMotivoCorreo     = 110,
+          @w_idMotivoCorreo     = 108,
           @w_idAplicacion       = 27,
-          @w_secuencia          = 0,
           @w_tablaLog           = 'logAnalisisLSTbl',
           @w_fechaAct           = Getdate(),
           @w_dbname             = Db_name(),
           @w_ip                 = dbo.Fn_BuscaDireccionIP();
+
+   Select @w_ip = Replace(@w_ip, '(', ''),
+          @w_ip = Replace(@w_ip, ')', '');
+
+   If @w_server like '%'+ Char(92) + '%'
+      Begin
+         Set @w_server = dbo.Fn_splitStringColumna(@w_server, Char(92), 1)
+      End
 
 --
 -- Búsqueda de Parámetros.
@@ -122,12 +130,14 @@ Fecha:       05/05/2025
    From   dbo.conParametrosGralesTbl
    Where  idParametroGral = 15
 
-    Select @w_grupoCorreo        = codigoGrupoCorreo,
-           @w_idTipoNotificacion = idTipoNotificacion,
-           @w_tablaLog           = tablaLog,
-           @w_proceso            = descripcion
-   From    dbo.catControlProcesosTbl
-   Where   idProceso = 11
+   Select @w_grupoCorreo        = codigoGrupoCorreo,
+          @w_idTipoNotificacion = idTipoNotificacion,
+          @w_tablalOG           = tablaLog,
+          @w_proceso            = descripcion,
+          @w_periodicidad       = dbo.Fn_splitStringColumna (Trim(periodicidad), Char(32), 1),
+          @w_idEstatus          = idEstatus
+   From   dbo.catControlProcesosTbl
+   Where  idProceso = 11
    If @@Rowcount = 0
       Begin
          Select @PnEstatus = 3000,
@@ -136,12 +146,25 @@ Fecha:       05/05/2025
          Goto Salida
       End
 
+   If @w_idEstatus != 1
+      Begin
+         Select @PnEstatus = 3006,
+                @PsMensaje = Dbo.Fn_Busca_MensajeError(@PnEstatus)
+
+         Goto Salida
+      End
+
+   If Isnumeric(@w_periodicidad) = 1
+      Begin
+         Set @w_minutosEspera = Isnull(@w_periodicidad, @w_minutosEspera);
+      End
+
 --
 -- Creación de Tablas Temporales.
 --
 
    Create Table #logAnalisisLSTbl
-   (idProceso     Integer       Not Null   Identity(1, 1) Primary Key,
+   (secuencia     Integer       Not Null   Identity(1, 1) Primary Key,
     servidor      Sysname       Not Null,
     linkServer    Sysname       Not Null,
     actividad     Varchar(Max)  Not Null,
@@ -157,7 +180,7 @@ Fecha:       05/05/2025
 
    Insert Into #logAnalisisLSTbl
    (servidor, linkServer, actividad)
-   Select  a.server_id, name, 'ANALISIS LS ' + name
+   Select  a.data_source, name, 'ANALISIS LINKED SERVERS:  ' + name
    From   sys.servers       a
    Join   sys.linked_logins b
    On     a.server_id  = b.server_id
@@ -175,8 +198,11 @@ Fecha:       05/05/2025
          Goto Salida
       End
 
-   Select @w_ip = Replace(@w_ip, '(', ''),
-          @w_ip = Replace(@w_ip, ')', '');
+
+   Select @w_idProceso = Max(idProceso)
+   From   dbo.logAnalisisLSTbl;
+
+   Set @w_idProceso = Isnull(@w_idProceso, 0) + 1;
 
    While @w_secuencia < @w_registros
    Begin
@@ -184,7 +210,7 @@ Fecha:       05/05/2025
 
       Select @w_DbLink = linkServer
       From   #logAnalisisLSTbl
-      Where  idProceso = @w_secuencia;
+      Where  secuencia = @w_secuencia;
       If @@Rowcount = 0
          Begin
             Break
@@ -193,17 +219,16 @@ Fecha:       05/05/2025
       Select @PnEstatus    = 0,
              @PsMensaje    = '',
              @w_Error      = 0,
-             @w_desc_error = ''
+             @w_desc_error = '';
 
-     If Exists (Select Top 1 1
-                From   dbo.logAnalisisLSTbl
-                Where  servidor   = @w_server
-                And    linkServer = @w_DbLink
-                And    Datediff(mi, fechaTermino, @w_fechaAct) < @w_minutosEspera)
-        Begin
-           Goto Siguiente
-        End
-
+      If Exists (Select Top 1 1
+                 From   dbo.logAnalisisLSTbl
+                 Where  servidor   = @w_server
+                 And    linkServer = @w_DbLink
+                 And    Datediff(mi, fechaTermino, @w_fechaAct) < @w_minutosEspera)
+         Begin
+            Goto Siguiente
+         End
 
       Select @w_sql   = 'Select  @w_output = count(1) '    +
                         'From [' + Rtrim(Ltrim(@w_DbLink)) + '].' + Rtrim(Ltrim(@w_baseDatos)) + '.dbo.' + @w_tabla,
@@ -226,76 +251,74 @@ Fecha:       05/05/2025
                    @PsMensaje = Concat('Error.: ', @w_Error, '. ', @w_desc_error, ' En Línea: ', @w_linea);
          End
 
-     If  @w_Error != 0
-         Begin
-            If Exists (Select Top 1 1
-                       From   dbo.logAnalisisLSTbl
-                       Where  servidor   = @w_servidor
-                       And    linkServer = @w_DbLink
-                       And    Datediff(mi, fechaTermino, @w_fechaAct) < @w_minutosEspera)
-               Begin
-                  Select @PnEstatus = 0,
-                         @PsMensaje = ''
-               End
-         End
-
-      If @PnEstatus != 0
+     If  Isnull(@w_salida, 0) = 0 Or
+         @PnEstatus       != 0
          Begin
             Insert into dbo.logAnalisisLSTbl
-            (servidor,     linkServer, actividad,       fechaInicio,
-             error,      mensajeError,    informado)
-            Select servidor,    linkServer,  actividad, fechaInicio,
-                   @PnEstatus,  @PsMensaje,  0
+            (idProceso, secuencia,   servidor,   linkServer,
+             actividad, fechaInicio, error,      mensajeError)
+            Select @w_idProceso, secuencia,   servidor,    linkServer,
+                   actividad,    fechaInicio, @PnEstatus,  @PsMensaje
             From   #logAnalisisLSTbl
-            Where  idProceso    = @w_secuencia
+            Where  secuencia    = @w_secuencia;
+            Set @w_insert = @w_insert + @@Rowcount;
 
-            Set @w_idProceso = @@Identity
+        End
 
-            Select @PnEstatus = 0,
-                   @PsMensaje = '';
-
-            Set @w_incidencia = Concat('Incidencia con LINK SERVER ', @w_DbLink);
-
-            Set @w_parametros = Concat(@w_grupoCorreo,   '|', @w_server,      '|',
-                                       @w_ip,            '|', @w_instancia,   '|',
-                                       @w_ambiente,      '|', @w_idAplicacion,'|',
-                                       @w_incidencia,    '|', @w_idProceso,   '|',
-                                       @w_tablaLog,      '|', @w_DbLink);
-
-            Execute dbo.Spa_conProcesosTbl @PnIdMotivo           = @w_idMotivoCorreo,
-                                           @PnIdTipoNotificacion = @w_idTipoNotificacion,
-                                           @PsParametros         = @w_parametros,
-                                           @PsURL                = '',
-                                           @PdFechaProgramada    = @w_fechaAct,
-                                           @PnIdUsuarioAct       = @w_idUsuarioAct,
-                                           @PnEstatus            = @PnEstatus  Output,
-                                           @PsMensaje            = @PsMensaje  Output
-
-            If @PnEstatus != 0
-               Begin
-                  Break
-               End
-
-            Update dbo.logAnalisisLSTbl
-            Set    informado    = 2,
-                   fechaTermino = Getdate()
-            Where  idProceso = @w_idProceso;
-
-         End
+     Select @PnEstatus = 0,
+            @PsMensaje = '';
 
 Siguiente:
 
    End
 
-   If @PnEstatus != 0
+   If @w_insert = 0
       Begin
          Goto Salida
       End
 
-   Select @PnEstatus    = 0,
-          @w_Error      = 0,
-          @PsMensaje    = '',
-          @w_desc_error = ''
+   Set @w_incidencia = 'INCIDENCIA CON LINKED SERVER ';
+
+   Set @w_parametros = Concat(@w_grupoCorreo,  '|', @w_server,       '|',
+                              @w_ip,           '|', @w_instancia,    '|',
+                              @w_ambiente,     '|', @w_baseDatos,    '|',
+                              @w_idAplicacion, '|', @w_incidencia,   '|',
+                              @w_idProceso,    '|', @w_tablaLog,     '|',
+                              @w_registros);
+
+   Execute dbo.Spa_conProcesosTbl @PnIdMotivo           = @w_idMotivoCorreo,
+                                  @PnIdTipoNotificacion = @w_idTipoNotificacion,
+                                  @PsParametros         = @w_parametros,
+                                  @PsURL                = '',
+                                  @PdFechaProgramada    = @w_fechaAct,
+                                  @PnIdUsuarioAct       = @w_idUsuarioAct,
+                                  @PnEstatus            = @PnEstatus  Output,
+                                  @PsMensaje            = @PsMensaje  Output
+
+   If @PnEstatus = 0
+      Begin
+         Begin Try
+            Update dbo.logAnalisisLSTbl
+            Set    informado    = 1,
+                   fechaTermino = Getdate()
+            Where  idProceso = @w_idProceso;
+         End Try
+
+         Begin Catch
+            Select  @w_Error      = @@Error,
+                    @w_desc_error = Substring (Error_Message(), 1, 230),
+                    @w_linea      = error_line()
+
+         End   Catch
+
+         If IsNull(@w_Error, 0) <> 0
+            Begin
+               Select @PnEstatus = @w_Error,
+                      @PsMensaje = Concat('Error.: ', @w_Error, ' ', @w_desc_error, ' En Línea ', @w_linea);
+
+            End
+
+      End
 
    Begin Try
       Update dbo.catControlProcesosTbl
