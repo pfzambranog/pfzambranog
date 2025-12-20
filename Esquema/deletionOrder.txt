@@ -5,7 +5,6 @@ logServiciosNotificaCorreosTbl
 logServiciosNotificacionesPushTbl
 logProcesosEspacioDDTbl
 logProcesosBloqueadosTbl
-logMantenIndicesTbl
 logMantenimientoBDTbl
 logHistorialEjecucionProcTbl
 logAnalisisObjetosNoValidosTbl
@@ -19,6 +18,7 @@ catControlProcesosTbl
 catCaracterEspecTbl
 segRelAplicacionUsuarioTbl
 conGrupoReceptorCorreoDetTbl
+logMantenIndicesDetTbl
 conParametrosCorreoTbl
 tmpLogError
 movProcesosDetELTbl
@@ -39,6 +39,7 @@ segUsuariosTbl
 movProcesosELTbl
 catMantenimentoTablasTbl
 catCorreosNoValidosTbl
+logMantenIndicesTbl
 conMotivosCorreoTbl
 catMonitoresPushTbl
 catAplicacionesTbl

@@ -64,14 +64,6 @@ Declare
    @w_indice              Sysname,
    @w_ambiente            Sysname;
 
-Declare
-   C_BaseD Cursor For
-   Select name
-   From   sys.databases a
-   Where  state_desc = 'ONLINE'
-   And    name  Not In ('master', 'tempdb', 'model', 'msdb')
-   And    name       = Isnull(@PsDbName, a.name);
-
 Begin
 
 -- Objetivo:    Realiza el mantenimiento de índices de la Base de Datos Seleccionada.
@@ -105,8 +97,50 @@ Begin
       End
 
 --
--- Creación de Tablas Temporales.
+-- Validaciones.
 --
+
+   If @PsDbName Is Not Null
+      Begin
+         Select @w_idEstatus = state
+         From   sys.databases a
+         Where  name       = @PsDbName;
+         If @@Rowcount = 0
+            Begin
+               Select @PnEstatus = 8200,
+                      @PsMensaje = dbo.Fn_Busca_MensajeError (@PnEstatus);
+               Goto Salida;
+            End
+ 
+         If @w_idEstatus != 0
+            Begin
+               Select @PnEstatus = 8201,
+                      @PsMensaje = dbo.Fn_Busca_MensajeError (@PnEstatus);
+               Goto Salida;
+            End        
+         
+      End
+
+   If Cursor_status('global', 'C_BaseD') >= -1
+      Begin
+         Close      C_BaseD
+         Deallocate C_BaseD
+      End
+      
+--
+-- Definición de CURSOR
+--
+   Declare
+      C_BaseD Cursor For
+      Select name
+      From   sys.databases a
+      Where  state_desc = 'ONLINE'
+      And    name  Not In ('master', 'tempdb', 'model', 'msdb')
+      And    name       = Isnull(@PsDbName, a.name)
+      Order  By 1;
+      
+--
+-- Creación de Tablas Temporales.
 --
 
    Create Table #tempObj1
@@ -168,15 +202,16 @@ Begin
          Goto Salida
       End
 
+
 --
 -- Inicio de Proceso
 --
 
    Select @w_idProceso = Max(idProceso)
-   From   dbo.logAnalisisJobsTbl;
+   From   dbo.logMantenIndicesTbl;
 
    Set @w_idProceso = Isnull(@w_idProceso, 0) + 1;
-
+   
    Open  C_BaseD
    While @@Fetch_status < 1
    Begin
@@ -205,6 +240,11 @@ Begin
                     Where  avg_fragmentation_in_percent >= 10
                     And    index_type_desc != ' + @w_comilla + 'HEAP' + @w_comilla;
 
+      Set @w_sql = 'Select ' + @w_comilla  + @w_dbName + @w_comilla + ', avg_fragmentation_in_percent , object_id
+                    From  sys.dm_db_index_physical_stats
+                    (DB_ID(N'+ @w_comilla  + @w_dbName + @w_comilla +'), Null, NULL, NULL , Null)
+                    Where  index_type_desc != ' + @w_comilla + 'HEAP' + @w_comilla;
+                    
       Insert Into #tempObj1
       (baseDatos, fragmentacion, object_id )
       Execute (@w_sql)
@@ -225,7 +265,7 @@ Begin
          Select @w_object_id      = object_id,
                 @w_fragmentacion  = fragmentacion
          From   #tempObj1
-         Where  secuencia = @w_secuencia2
+         Where  secuencia = @w_secuencia2;
          If @@Rowcount = 0
             Begin
                Break
@@ -239,7 +279,8 @@ Begin
                        On     b.object_id = a.object_id
                        Join   ' + @w_dbName + '.sys.schemas c
                        On     b.schema_id = c.schema_id
-                       Where  b.object_id = ' + Cast(@w_object_id As Varchar)
+                       Where  b.object_id = ' + Cast(@w_object_id As Varchar) + ' 
+                       Order  By 2, 3'
 
          Insert Into #tempObj2
          (esquema, tabla, indice)
@@ -260,7 +301,7 @@ Begin
                    @w_indice  = indice,
                    @w_esquema = esquema
             From   #tempObj2
-            Where  secuencia = @w_secuencia2
+            Where  secuencia = @w_secuencia3
             If @@Rowcount = 0
                Begin
                   Break
@@ -357,6 +398,7 @@ Proximo:
       If Exists (Select Top 1 1
                  From   logMantenIndicesDetTbl
                  Where  idProceso = @w_idProceso
+                 And    secuencia = @w_secuencia
                  And    error    != 0)
          Begin
             Set @w_existeError = 1
@@ -365,53 +407,29 @@ Proximo:
          Begin
             Set @w_existeError = 0
          End
-
+         
 NextBd:
 
       Update dbo.logMantenIndicesTbl
       Set    fechaProceso = Getdate(),
-             error        = Case When a.error = 0
-                                 Then Isnull(@w_existeError, @PnEstatus)
-                                 Else a.error
-                            End,
-             mensajeError = Case When Isnull(a.mensajeError, '') = ''
-                                 Then Case When Isnull(@w_existeError, @PnEstatus) != 0
-                                           Then 'Hay errores en el proceso de Mantenimiento.'
-                                           Else ''
-                                      End
-                                 Else a.mensajeError
+             error        = @w_existeError,
+             mensajeError = Case When @w_existeError != 0
+                                 Then 'Hay errores en el proceso de Mantenimiento. ' + a.mensajeError
+                                 Else @w_mensaje
                             End
       From   dbo.logMantenIndicesTbl a
       Where  idProceso = @w_idProceso
       And    secuencia = @w_secuencia;
 
    End
+
    Close      C_BaseD
    Deallocate C_BaseD
 
-   Begin Try
-      Update catControlProcesosTbl
-      Set    ultFechaEjecucion = Getdate()
-      Where  idProceso         = 2;
-   End Try
-
-   Begin Catch
-      Select  @w_Error      = @@Error,
-              @w_desc_error = Substring (Error_Message(), 1, 230)
-
-   End   Catch
-
-   If IsNull(@w_Error, 0) <> 0
-      Begin
-         Select @PnEstatus = @w_Error,
-                @PsMensaje = 'Error.: ' + Rtrim(Ltrim(Cast(@w_Error As Varchar))) + ' ' + @w_desc_error
-
-      End
-
 Salida:
 
-  Set Xact_Abort    Off
-  Return
+   Set Xact_Abort    Off
+   Return
 
 End
 Go

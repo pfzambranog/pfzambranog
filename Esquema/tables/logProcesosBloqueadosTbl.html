@@ -73,7 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>logProcesosBloqueadosTbl</h1><p><span id="recordNumber">0</span> rows</p><br />
+                    <h1>logProcesosBloqueadosTbl</h1><p><span id="recordNumber">4</span> rows</p><br />
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
@@ -123,10 +123,10 @@
                                 <tbody>
                                 <tr>
                                     <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="idProceso">idProceso</span></td>
-                                    <td>bigint identity</td>
+                                    <td>bigint</td>
                                     <td>8</td>
                                     <td title=''></td>
-                                    <td title='Automatically updated by the database'>√</td>
+                                    <td title=''></td>
                                     <td>null</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
@@ -137,6 +137,23 @@
                                         </table>
                                     </td>
                                     <td><p>Identificador Correlativo del Proceso de Análisis.</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="secuencia">secuencia</span></td>
+                                    <td>smallint</td>
+                                    <td>2</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>((1))</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Identificador Correlativo de la sesión  del Proceso de Análisis.</p></td>
                                 </tr>
                                 <tr>
                                     <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="servidor">servidor</span></td>
@@ -410,6 +427,23 @@
                                     </td>
                                     <td><p>Indica si fue reportada la incidencia de Procesos Bloqueados.</p></td>
                                 </tr>
+                                <tr>
+                                    <td><span id="fechaInformacion">fechaInformacion</span></td>
+                                    <td>datetime</td>
+                                    <td>16,3</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -443,11 +477,11 @@
                                 <tr>
                                     <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> logProcesosBloqueadosPk</td>
                                     <td>Primary key</td>
-                                    <td><span title='Ascending'>Asc</span></td>
-                                    <td>idProceso</td>
+                                    <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
+                                    <td>idProceso + secuencia</td>
                                 </tr>
                                 <tr>
-                                    <td title='Indexed'>idxlogProcesosBloqueados</td>
+                                    <td title='Indexed'>logProcesosBloqueadosIdx01</td>
                                     <td>Performance</td>
                                     <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
                                     <td>servidor + databaseName + sessionId</td>
@@ -474,7 +508,7 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="logProcesosBloqueadosTbl.html" target="_top" title="logProcesosBloqueadosTbl" alt="" coords="5,5,415,573">
+<area shape="rect" id="node1" href="logProcesosBloqueadosTbl.html" target="_top" title="logProcesosBloqueadosTbl" alt="" coords="5,5,415,632">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/logProcesosBloqueadosTbl.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>

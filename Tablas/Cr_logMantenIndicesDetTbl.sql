@@ -23,11 +23,9 @@ Create Table dbo.logMantenIndicesDetTbl
 Constraint logMantenIndicesDetPk
 Primary Key (idProcesoDet),
 Constraint logMantenIndicesDetFk01
-Foreign Key (idProceso)
-References logMantenIndicesTbl (idProceso, secuencia) On Delete Cascade)
-Go
-
-Create Index logMantenIndicesDetIdx01 on logMantenIndicesDetTbl (idProceso)
+Foreign Key (idProceso, secuencia)
+References logMantenIndicesTbl (idProceso, secuencia) On Delete Cascade,
+Index logMantenIndicesDetIdx01 (idProceso, secuencia))
 Go
 
 --
@@ -61,6 +59,16 @@ Execute sys.sp_addextendedproperty @name       = 'MS_Description',
                                    @level1name = 'logMantenIndicesDetTbl', 
                                    @level2type = 'Column',
                                    @level2name = 'idProceso'
+Go
+
+Execute sys.sp_addextendedproperty @name       = 'MS_Description', 
+                                   @value      = 'Correlativo del Identificador del Proceso de Mantenimiento.' , 
+                                   @level0type = 'Schema',
+                                   @level0name = 'dbo', 
+                                   @level1type = 'Table',
+                                   @level1name = 'logMantenIndicesDetTbl', 
+                                   @level2type = 'Column',
+                                   @level2name = 'secuencia'
 Go
 
 Execute sys.sp_addextendedproperty @name       = 'MS_Description', 
