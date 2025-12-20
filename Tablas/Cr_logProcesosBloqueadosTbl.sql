@@ -12,7 +12,8 @@ If Exists (Select Top 1 1
 Go   
 
 Create Table dbo.logProcesosBloqueadosTbl
-(idProceso                Bigint         Not Null Identity (1, 1),
+(idProceso                Bigint         Not Null,
+ secuencia                Smallint       Not Null,
  servidor                 Sysname        Not Null,
  databaseName             Sysname        Not Null,
  sessionId                Integer        Not Null,
@@ -30,9 +31,9 @@ Create Table dbo.logProcesosBloqueadosTbl
  fechaTermino             Datetime           Null,
  informado                Tinyint        Not Null Default 0,
  Constraint logProcesosBloqueadosPk
- Primary Key (idProceso));
+ Primary Key (idProceso, secuencia));
  
- Create Index idxlogProcesosBloqueados On logProcesosBloqueadosTbl (servidor, databaseName, sessionId)
+Create Index idxlogProcesosBloqueados On logProcesosBloqueadosTbl (servidor, databaseName, sessionId)
  
  --
 -- Comentarios

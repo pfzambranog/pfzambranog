@@ -28,27 +28,41 @@ Create Or Alter Procedure dbo.Spp_EjecutaMantenIndices
 As
 
 Declare
-   @w_error             Integer,
-   @w_desc_error        Varchar ( 250),
-   @w_actividad         Varchar (  80),
-   @w_sql               NVarchar(1500),
-   @w_param             NVarchar( 750),
-   @w_existe            Tinyint,
-   @w_existeError       Tinyint,
-   @w_comilla           Char(1),
-   @w_registros         Integer,
-   @w_registro2         Integer,
-   @w_secuencia         Integer,
-   @w_secuencia2        Integer,
-   @w_idProceso         Integer,
-   @w_idProceso2        Integer,
-   @w_object_id         Integer,
-   @w_fragmentacion     Decimal(10, 3),
-   @w_dbName            Sysname,
-   @w_servidor          Sysname,
-   @w_esquema           Sysname,
-   @w_tabla             Sysname,
-   @w_indice            Sysname;
+   @w_error               Integer,
+   @w_registros           Integer,
+   @w_registro2           Integer,
+   @w_secuencia           Integer,
+   @w_secuencia2          Integer,
+   @w_secuencia3          Integer,
+   @w_idProceso           Integer,
+   @w_idProceso2          Integer,
+   @w_object_id           Integer,
+   @w_linea               Integer,
+   @w_idUsuarioAct        Integer,
+   @w_idAplicacion        Smallint,
+   @w_fragmentacion       Decimal(10, 3),
+   @w_desc_error          Varchar ( 250),
+   @w_proceso             Varchar ( 100),
+   @w_actividad           Varchar (  80),
+   @w_ip                  Varchar (  30),
+   @w_grupoCorreo         Varchar (  20),
+   @w_usuario             Varchar ( Max),
+   @w_mensaje             Varchar ( Max),
+   @w_sql                 NVarchar(1500),
+   @w_param               NVarchar( 750),
+   @w_existe              Tinyint,
+   @w_existeError         Tinyint,
+   @w_idEstatus           Tinyint,
+   @w_idMotivoCorreo      Smallint,
+   @w_idTipoNotificacion  Smallint,
+   @w_comilla             Char(1),
+   @w_dbName              Sysname,
+   @w_servidor            Sysname,
+   @w_esquema             Sysname,
+   @w_tabla               Sysname,
+   @w_tablalOG            Sysname,
+   @w_indice              Sysname,
+   @w_ambiente            Sysname;
 
 Declare
    C_BaseD Cursor For
@@ -60,46 +74,40 @@ Declare
 
 Begin
 
-/*
+-- Objetivo:    Realiza el mantenimiento de índices de la Base de Datos Seleccionada.
+-- Programador: Pedro Felipe Zambrano
+-- Fecha:       06/05/2025
 
-Objetivo:    Realiza el mantenimiento de índices de la Base de Datos Seleccionada.
-Programador: Pedro Felipe Zambrano
-Fecha:       06/05/2025
 
-*/
-
-   Set Nocount       On
-   Set Xact_Abort    On
-   Set Ansi_Nulls    Off
+   Set Nocount         On
+   Set Xact_Abort      On
+   Set Ansi_Nulls      Off
+   Set Ansi_Warnings   OFF
 
 --
 -- Incializamos Variables
 --
 
-   Select @PnEstatus        = 0,
-          @PsMensaje        = Null,
-          @w_comilla        = Char(39),
-          @w_servidor       = @@ServerName,
-          @w_secuencia      = 0;
+   Select @PnEstatus            = 0,
+          @PsMensaje            = Char(32),
+          @w_comilla            = Char(39),
+          @w_servidor           = @@ServerName,
+          @w_secuencia          = 0,
+          @w_idAplicacion       = 27,
+          @w_ip                 = dbo.Fn_buscaDireccionIP();
 
-   Begin Try
-      Update catControlProcesosTbl
-      Set    ultFechaEjecucion = Getdate()
-      Where  idProceso         = 2;
-   End Try
+   Select @w_ip = Replace(@w_ip, '(', ''),
+          @w_ip = Replace(@w_ip, ')', '');
 
-   Begin Catch
-      Select  @w_Error      = @@Error,
-              @w_desc_error = Substring (Error_Message(), 1, 230)
-
-   End   Catch
-
-   If IsNull(@w_Error, 0) <> 0
+   If @w_servidor like '%'+ Char(92) + '%'
       Begin
-         Select @PnEstatus = @w_Error,
-                @PsMensaje = 'Error.: ' + Rtrim(Ltrim(Cast(@w_Error As Varchar))) + ' ' + @w_desc_error
-
+         Set @w_servidor = dbo.Fn_splitStringColumna(@w_servidor, Char(92), 1)
       End
+
+--
+-- Creación de Tablas Temporales.
+--
+--
 
    Create Table #tempObj1
    (secuencia       Integer Identity (1, 1) Not Null Primary Key,
@@ -113,6 +121,62 @@ Fecha:       06/05/2025
     tabla           Sysname                 Not Null,
     indice          Sysname                     Null);
 
+--
+-- Búsqueda de Parámetros.
+--
+
+   Select @w_ambiente = Upper(parametroChar)
+   From   dbo.conParametrosGralesTbl
+   Where  idParametroGral = 24;
+   If @@Rowcount = 0
+      Begin
+         Set @w_ambiente = ''
+      End
+
+   Select @w_usuario = parametroChar
+   From   dbo.conParametrosGralesTbl
+   Where  idParametroGral = 8;
+
+   Select @w_sql   = 'Select @o_usuario = dbo.Fn_Desencripta_cadena(' + @w_usuario + ') ',
+          @w_param = '@o_usuario Varchar(Max) Output '
+
+   Execute Sp_ExecuteSQL @w_sql, @w_param, @o_usuario = @w_usuario Output
+
+   Set @w_idUsuarioAct = Cast(@w_usuario As Integer)
+
+   Select @w_grupoCorreo        = codigoGrupoCorreo,
+          @w_tablalOG           = tablaLog,
+          @w_idTipoNotificacion = idTipoNotificacion,
+          @w_proceso            = descripcion,
+          @w_mensaje            = mensaje,
+          @w_idEstatus          = idEstatus
+   From   dbo.catControlProcesosTbl
+   Where  idProceso = 2;
+   If @@Rowcount = 0
+      Begin
+         Select @PnEstatus = 3000,
+                @PsMensaje = Dbo.Fn_Busca_MensajeError(@PnEstatus)
+
+         Goto Salida
+      End
+
+   If @w_idEstatus != 1
+      Begin
+         Select @PnEstatus = 3006,
+                @PsMensaje = Dbo.Fn_Busca_MensajeError(@PnEstatus)
+
+         Goto Salida
+      End
+
+--
+-- Inicio de Proceso
+--
+
+   Select @w_idProceso = Max(idProceso)
+   From   dbo.logAnalisisJobsTbl;
+
+   Set @w_idProceso = Isnull(@w_idProceso, 0) + 1;
+
    Open  C_BaseD
    While @@Fetch_status < 1
    Begin
@@ -123,15 +187,15 @@ Fecha:       06/05/2025
          End
 
       Select @w_registro2   = 0,
-             @w_secuencia   = 0,
              @PnEstatus     = 0,
              @PsMensaje     = '',
+             @w_secuencia   = @w_secuencia + 1,
+             @w_secuencia2  = 0,
              @w_Error       = 0;
 
       Insert Into dbo.logMantenIndicesTbl
-      (servidor, baseDatos, actividad)
-      Select @w_servidor, @w_dbName, 'Proceso de Mantenimiento de Índices'
-      Set @w_idProceso = @@Identity
+      (idProceso, secuencia,servidor, baseDatos)
+      Select @w_idProceso, @w_secuencia, @w_servidor, @w_dbName
 
       Truncate Table #tempObj1
 
@@ -151,9 +215,9 @@ Fecha:       06/05/2025
             Goto NextBd
          End
 
-      While  @w_secuencia < @w_registros
+      While  @w_secuencia2 < @w_registros
       Begin
-         Select @w_secuencia = @w_secuencia + 1,
+         Select @w_secuencia2 = @w_secuencia2 + 1,
                 @PnEstatus   = 0,
                 @PsMensaje   = '',
                 @w_Error     = 0;
@@ -161,7 +225,7 @@ Fecha:       06/05/2025
          Select @w_object_id      = object_id,
                 @w_fragmentacion  = fragmentacion
          From   #tempObj1
-         Where  secuencia = @w_secuencia
+         Where  secuencia = @w_secuencia2
          If @@Rowcount = 0
             Begin
                Break
@@ -182,11 +246,11 @@ Fecha:       06/05/2025
          Execute (@w_sql)
 
          Select @w_registro2  = @@Rowcount,
-                @w_secuencia2 = 0
+                @w_secuencia3 = 0
 
-         While  @w_secuencia2 < @w_registro2
+         While  @w_secuencia3 < @w_registro2
          Begin
-            Select @w_secuencia2 = @w_secuencia2 + 1,
+            Select @w_secuencia3 = @w_secuencia3 + 1,
                    @w_actividad  = '',
                    @PnEstatus    = 0,
                    @PsMensaje    = '',
@@ -210,8 +274,8 @@ Fecha:       06/05/2025
                          @w_sql       = 'Alter Index "' + @w_indice + '" On ' + @w_dbName + '.' + @w_esquema + '.' + @w_tabla + ' Reorganize'
 
                   Insert Into dbo.logMantenIndicesDetTbl
-                  (idProceso, actividad)
-                  Select @w_idProceso, @w_actividad
+                  (idProceso, secuencia, actividad)
+                  Select @w_idProceso, @w_secuencia, @w_actividad
 
                   Set @w_idProceso2 = @@Identity
 
@@ -243,7 +307,7 @@ Siguiente:
 
                   Update dbo.logMantenIndicesDetTbl
                   Set    fechaTermino = Getdate()
-                  Where  idProcesoDet    = @w_idProceso2
+                  Where  idProcesoDet = @w_idProceso2
 
                End
          End
@@ -251,8 +315,8 @@ Siguiente:
          Set @w_actividad = 'Actualizando Estadísticas Entidad ' + @w_esquema + '.' + @w_tabla
 
          Insert Into dbo.logMantenIndicesDetTbl
-         (idProceso, actividad)
-         Select @w_idProceso, @w_actividad
+         (idProceso, secuencia, actividad)
+         Select @w_idProceso, @w_secuencia, @w_actividad
          Set @w_idProceso2 = @@Identity
 
          Set @w_sql = 'Update Statistics  ' + @w_dbName + '.' + @w_esquema + '.' +  @w_tabla + ' With Fullscan '
@@ -305,7 +369,7 @@ Proximo:
 NextBd:
 
       Update dbo.logMantenIndicesTbl
-      Set    fechaTermino = Getdate(),
+      Set    fechaProceso = Getdate(),
              error        = Case When a.error = 0
                                  Then Isnull(@w_existeError, @PnEstatus)
                                  Else a.error
@@ -319,11 +383,32 @@ NextBd:
                             End
       From   dbo.logMantenIndicesTbl a
       Where  idProceso = @w_idProceso
+      And    secuencia = @w_secuencia;
 
+   End
+   Close      C_BaseD
+   Deallocate C_BaseD
 
-  End
-  Close      C_BaseD
-  Deallocate C_BaseD
+   Begin Try
+      Update catControlProcesosTbl
+      Set    ultFechaEjecucion = Getdate()
+      Where  idProceso         = 2;
+   End Try
+
+   Begin Catch
+      Select  @w_Error      = @@Error,
+              @w_desc_error = Substring (Error_Message(), 1, 230)
+
+   End   Catch
+
+   If IsNull(@w_Error, 0) <> 0
+      Begin
+         Select @PnEstatus = @w_Error,
+                @PsMensaje = 'Error.: ' + Rtrim(Ltrim(Cast(@w_Error As Varchar))) + ' ' + @w_desc_error
+
+      End
+
+Salida:
 
   Set Xact_Abort    Off
   Return
@@ -364,5 +449,3 @@ Else
                                         @level1name = @w_procedimiento
    End
 Go
-
-

@@ -13,7 +13,7 @@ Go
 
 Create Table dbo.logAnalisisLSTbl
 (idProceso     Integer       Not Null,
- Secuencia     Integer       Not Null,
+ secuencia     Integer       Not Null,
  servidor      Sysname       Not Null,
  linkServer    Sysname       Not Null,
  actividad     Varchar(Max)  Not Null, 

@@ -14,6 +14,7 @@ Go
 Create Table dbo.logMantenIndicesDetTbl
 (idProcesoDet      Integer         Not Null   Identity(1, 1),
  idProceso         Integer         Not Null,
+ secuencia         Smallint        Not Null,
  actividad         Varchar(100)    Not Null,
  fechaInicio       DateTime        Not Null   Default GetDate(),
  fechaTermino      Datetime            Null,
@@ -23,7 +24,7 @@ Constraint logMantenIndicesDetPk
 Primary Key (idProcesoDet),
 Constraint logMantenIndicesDetFk01
 Foreign Key (idProceso)
-References logMantenIndicesTbl (idProceso) On Delete Cascade)
+References logMantenIndicesTbl (idProceso, secuencia) On Delete Cascade)
 Go
 
 Create Index logMantenIndicesDetIdx01 on logMantenIndicesDetTbl (idProceso)

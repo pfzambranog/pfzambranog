@@ -12,22 +12,18 @@ If Exists (Select Top 1 1
 Go
 
 Create Table dbo.logMantenIndicesTbl
-(idProceso         Integer         Not Null   Identity(1, 1),
+(idProceso         Integer         Not Null,
+ secuencia         Smallint        Not Null,
  servidor          Sysname         Not Null,
  basedatos         Sysname         Not Null,
- actividad         Varchar(100)    Not Null,
- fechaInicio       DateTime        Not Null   Default GetDate(),
- fechaTermino      Datetime            Null,
+ fechaProceso      DateTime        Not Null   Default GetDate(),
  informado         Tinyint         Not Null   Default 0,
  error             Integer         Not Null   Default 0,
  mensajeError      Nvarchar(4000)  Not Null   Default '',
 Constraint logMantenIndicesPk
-Primary Key (idProceso))
+Primary Key (idProceso, secuencia))
 Go
 
-
-Create Index logMantenIndicesIdex01 On logMantenIndicesTbl (fechaTermino, informado)
-Go
 
 --
 -- Comentarios
@@ -52,6 +48,17 @@ Execute sys.sp_addextendedproperty @name       = 'MS_Description',
                                    @level2name = 'idProceso'
 Go
 
+
+Execute sys.sp_addextendedproperty @name       = 'MS_Description', 
+                                   @value      = 'Secuencia del Identificador del Proceso de Mantenimiento.' , 
+                                   @level0type = 'Schema',
+                                   @level0name = 'dbo', 
+                                   @level1type = 'Table',
+                                   @level1name = 'logMantenIndicesTbl', 
+                                   @level2type = 'Column',
+                                   @level2name = 'secuencia'
+Go
+
 Execute sys.sp_addextendedproperty @name       = 'MS_Description', 
                                    @value      = 'Identificador del Servidor donde se realizó Proceso de Mantenimiento.' , 
                                    @level0type = 'Schema',
@@ -72,34 +79,15 @@ Execute sys.sp_addextendedproperty @name       = 'MS_Description',
                                    @level2name = 'basedatos'
 Go
 
-Execute sys.sp_addextendedproperty @name       = 'MS_Description', 
-                                   @value      = 'Descripción de la actividad.' , 
-                                   @level0type = 'Schema',
-                                   @level0name = 'dbo', 
-                                   @level1type = 'Table',
-                                   @level1name = 'logMantenIndicesTbl', 
-                                   @level2type = 'Column',
-                                   @level2name = 'actividad'
-Go
 
 Execute sys.sp_addextendedproperty @name       = 'MS_Description', 
-                                   @value      = 'Fecha de Inicio del Proceso de Mantenimiento' , 
+                                   @value      = 'Fecha de Proceso de Mantenimiento' , 
                                    @level0type = 'Schema',
                                    @level0name = 'dbo', 
                                    @level1type = 'Table',
                                    @level1name = 'logMantenIndicesTbl', 
                                    @level2type = 'Column',
-                                   @level2name = 'fechaInicio'
-Go
-
-Execute sys.sp_addextendedproperty @name       = 'MS_Description', 
-                                   @value      = 'Fecha Termino del Proceso de Mantenimiento' , 
-                                   @level0type = 'Schema',
-                                   @level0name = 'dbo', 
-                                   @level1type = 'Table',
-                                   @level1name = 'logMantenIndicesTbl', 
-                                   @level2type = 'Column',
-                                   @level2name = 'fechaTermino'
+                                   @level2name = 'fechaProceso'
 Go
 
 Execute sys.sp_addextendedproperty @name       = 'MS_Description', 
