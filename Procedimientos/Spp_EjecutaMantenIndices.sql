@@ -41,11 +41,14 @@ Declare
    @w_idUsuarioAct        Integer,
    @w_idAplicacion        Smallint,
    @w_fragmentacion       Decimal(10, 3),
+   @w_porcFragm           Decimal(10, 2),
    @w_desc_error          Varchar ( 250),
    @w_proceso             Varchar ( 100),
    @w_actividad           Varchar (  80),
    @w_ip                  Varchar (  30),
    @w_grupoCorreo         Varchar (  20),
+   @w_incidencia          Varchar ( 150),
+   @w_parametros          Varchar ( Max),
    @w_usuario             Varchar ( Max),
    @w_mensaje             Varchar ( Max),
    @w_sql                 NVarchar(1500),
@@ -56,6 +59,7 @@ Declare
    @w_idMotivoCorreo      Smallint,
    @w_idTipoNotificacion  Smallint,
    @w_comilla             Char(1),
+   @w_fechaAct            Datetime,
    @w_dbName              Sysname,
    @w_servidor            Sysname,
    @w_esquema             Sysname,
@@ -83,9 +87,11 @@ Begin
    Select @PnEstatus            = 0,
           @PsMensaje            = Char(32),
           @w_comilla            = Char(39),
+          @w_fechaAct           = Getdate(),
           @w_servidor           = @@ServerName,
           @w_secuencia          = 0,
           @w_idAplicacion       = 27,
+          @w_idMotivoCorreo     = 104,
           @w_ip                 = dbo.Fn_buscaDireccionIP();
 
    Select @w_ip = Replace(@w_ip, '(', ''),
@@ -111,14 +117,14 @@ Begin
                       @PsMensaje = dbo.Fn_Busca_MensajeError (@PnEstatus);
                Goto Salida;
             End
- 
+
          If @w_idEstatus != 0
             Begin
                Select @PnEstatus = 8201,
                       @PsMensaje = dbo.Fn_Busca_MensajeError (@PnEstatus);
                Goto Salida;
-            End        
-         
+            End
+
       End
 
    If Cursor_status('global', 'C_BaseD') >= -1
@@ -126,7 +132,7 @@ Begin
          Close      C_BaseD
          Deallocate C_BaseD
       End
-      
+
 --
 -- Definición de CURSOR
 --
@@ -138,7 +144,7 @@ Begin
       And    name  Not In ('master', 'tempdb', 'model', 'msdb')
       And    name       = Isnull(@PsDbName, a.name)
       Order  By 1;
-      
+
 --
 -- Creación de Tablas Temporales.
 --
@@ -158,6 +164,14 @@ Begin
 --
 -- Búsqueda de Parámetros.
 --
+
+   Select @w_porcFragm = parametroNumber
+   From   dbo.conParametrosGralesTbl
+   Where  idParametroGral = 25;
+   If @@Rowcount = 0
+      Begin
+         Set @w_porcFragm = 0;
+      End
 
    Select @w_ambiente = Upper(parametroChar)
    From   dbo.conParametrosGralesTbl
@@ -211,7 +225,7 @@ Begin
    From   dbo.logMantenIndicesTbl;
 
    Set @w_idProceso = Isnull(@w_idProceso, 0) + 1;
-   
+
    Open  C_BaseD
    While @@Fetch_status < 1
    Begin
@@ -237,14 +251,9 @@ Begin
       Set @w_sql = 'Select ' + @w_comilla  + @w_dbName + @w_comilla + ', avg_fragmentation_in_percent , object_id
                     From  sys.dm_db_index_physical_stats
                     (DB_ID(N'+ @w_comilla  + @w_dbName + @w_comilla +'), Null, NULL, NULL , Null)
-                    Where  avg_fragmentation_in_percent >= 10
+                    Where  avg_fragmentation_in_percent >= ' + Cast(@w_porcFragm As Varchar) + '
                     And    index_type_desc != ' + @w_comilla + 'HEAP' + @w_comilla;
 
-      Set @w_sql = 'Select ' + @w_comilla  + @w_dbName + @w_comilla + ', avg_fragmentation_in_percent , object_id
-                    From  sys.dm_db_index_physical_stats
-                    (DB_ID(N'+ @w_comilla  + @w_dbName + @w_comilla +'), Null, NULL, NULL , Null)
-                    Where  index_type_desc != ' + @w_comilla + 'HEAP' + @w_comilla;
-                    
       Insert Into #tempObj1
       (baseDatos, fragmentacion, object_id )
       Execute (@w_sql)
@@ -279,7 +288,7 @@ Begin
                        On     b.object_id = a.object_id
                        Join   ' + @w_dbName + '.sys.schemas c
                        On     b.schema_id = c.schema_id
-                       Where  b.object_id = ' + Cast(@w_object_id As Varchar) + ' 
+                       Where  b.object_id = ' + Cast(@w_object_id As Varchar) + '
                        Order  By 2, 3'
 
          Insert Into #tempObj2
@@ -326,14 +335,15 @@ Begin
 
                   Begin Catch
                      Select  @w_Error      = @@Error,
-                             @w_desc_error = Substring (Error_Message(), 1, 230)
+                             @w_desc_error = Substring (Error_Message(), 1, 230),
+                             @w_linea      = error_line();
 
                   End   Catch
 
                   If IsNull(@w_Error, 0) <> 0
                      Begin
                         Select @PnEstatus = @w_Error,
-                               @PsMensaje = 'Error.: ' + Rtrim(Ltrim(Cast(@w_Error As Varchar))) + ' ' + @w_desc_error
+                               @PsMensaje = Concat('Error.: ', @w_Error, ' ', @w_desc_error, ' En Linea ', @w_linea);
 
                         Update dbo.logMantenIndicesDetTbl
                         Set    error        = @PnEstatus,
@@ -368,14 +378,15 @@ Siguiente:
 
          Begin Catch
             Select  @w_Error      = @@Error,
-                    @w_desc_error = Substring (Error_Message(), 1, 230)
+                    @w_desc_error = Substring (Error_Message(), 1, 230),
+                    @w_linea      = error_line()
 
          End   Catch
 
          If IsNull(@w_Error, 0) <> 0
             Begin
                Select @PnEstatus = @w_Error,
-                      @PsMensaje = 'Error.: ' + Rtrim(Ltrim(Cast(@w_Error As Varchar))) + ' ' + @w_desc_error
+                      @PsMensaje = Concat('Error.: ', @w_Error, ' ', @w_desc_error, ' En Linea ', @w_linea);
 
                Update dbo.logMantenIndicesDetTbl
                Set    error        = @PnEstatus,
@@ -407,7 +418,7 @@ Proximo:
          Begin
             Set @w_existeError = 0
          End
-         
+
 NextBd:
 
       Update dbo.logMantenIndicesTbl
@@ -426,6 +437,53 @@ NextBd:
    Close      C_BaseD
    Deallocate C_BaseD
 
+--
+-- Generación de Solicitud de Notificación.
+--
+
+   Set @w_incidencia = Substring(@w_proceso, 1, 150)
+
+   Set @w_parametros = Concat(@w_grupoCorreo,  '|', @w_servidor,     '|',
+                              @w_ip,           '|', @w_ambiente,     '|',
+                              @w_tablalOG,     '|', @w_idAplicacion, '|',
+                              @w_incidencia,   '|', @w_idProceso);
+
+   Execute dbo.Spa_conProcesosTbl @PnIdMotivo           = @w_idMotivoCorreo,
+                                  @PnIdTipoNotificacion = @w_idTipoNotificacion,
+                                  @PsParametros         = @w_parametros,
+                                  @PdFechaProgramada    = @w_fechaAct,
+                                  @PnIdUsuarioAct       = @w_idUsuarioAct,
+                                  @PnEstatus            = @PnEstatus  Output,
+                                  @PsMensaje            = @PsMensaje  Output;
+
+   If @PnEstatus = 0
+      Begin
+         Begin Try
+            Update dbo.logMantenIndicesTbl
+            Set    informado = 1
+            From   dbo.logMantenIndicesTbl a
+            Where  idProceso = @w_idProceso;
+         
+            Update dbo.catControlProcesosTbl
+            Set    ultFechaEjecucion = Getdate()
+            Where  idProceso = 2;
+         End Try
+
+         Begin Catch
+            Select  @w_Error      = @@Error,
+                    @w_desc_error = Substring (Error_Message(), 1, 230),
+                    @w_linea      = error_line()
+
+         End   Catch
+
+         If IsNull(@w_Error, 0) <> 0
+            Begin
+               Select @PnEstatus = @w_Error,
+                      @PsMensaje = Concat('Error.: ', @w_Error, ' ', @w_desc_error, ' En Linea ', @w_linea);
+
+            End
+     End
+ 
 Salida:
 
    Set Xact_Abort    Off

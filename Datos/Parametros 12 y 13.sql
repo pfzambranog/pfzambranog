@@ -4,7 +4,7 @@ Declare
 Declare
    @PsDescripcion        Varchar(  100)   = 'Dirección Física de Alojamiento  de Logs',
    @PnParametroNumber    Integer          = Null,
-   @PsParametroChar      Varchar(  120)   = Concat('C:', @w_caracter, 'Sites',@w_caracter, 'ApiSeguridad' + @w_caracter + 'ApiSeguridad-QA',@w_caracter, 'LogsDba',@w_caracter, ''),
+   @PsParametroChar      Varchar(  120)   = Concat('C:', @w_caracter, 'Sites',@w_caracter, 'Api' + @w_caracter + 'Dearrollo',@w_caracter, 'LogsDba',@w_caracter, ''),
    @PdParametroFecha     Datetime         = Null,
    @PnIdUsuarioAct       Smallint         = 1,
    @PsIpAct              Varchar(   30)   = Null,
@@ -27,7 +27,7 @@ Begin
    Select @PnEstatus, @PsMensaje
 
    Select @PsDescripcion   = 'Dirección URL de Alojamiento  de Logs',
-          @PsParametroChar = 'https://qasegcorp.tiii.mx/LogsDba/';
+          @PsParametroChar = 'http://localhost/LogsDba/';
 
    Execute Spa_conParametrosGralesTbl @PsDescripcion     = @PsDescripcion    , 
                                       @PnParametroNumber = @PnParametroNumber, 
@@ -58,7 +58,7 @@ Begin
 
    Select @PsDescripcion     = 'Minutos de Espera para Emitir Próximo Correo Informativo.',
           @PsParametroChar   = Null,
-          @PnParametroNumber = 10;
+          @PnParametroNumber = 38;
 
    Execute Spa_conParametrosGralesTbl @PsDescripcion     = @PsDescripcion    , 
                                       @PnParametroNumber = @PnParametroNumber, 
