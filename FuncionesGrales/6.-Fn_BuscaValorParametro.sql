@@ -1,8 +1,11 @@
+Use SCMBD
+Go
+
 /*
 
 Declare
-   @PnIdParametroGral     Char(25) = 4,
-   @PnIdConsulta   Bit      = 0
+   @PnIdParametroGral     Smallint = 4,
+   @PnIdConsulta          Bit      = 0
 
 Begin
    Select dbo.Fn_BuscaValorParametro(@PnIdParametroGral, @PnIdConsulta)
@@ -13,17 +16,17 @@ Go
 */
 
 Create Or Alter Function dbo.Fn_BuscaValorParametro
-  (@PnIdParametroGral     Char(25),
+  (@PnIdParametroGral     Smallint,
    @PnIdConsulta          Bit)    -- 0 = Valor String, 1 = Valor Numérico, 2 = Valor Fecha (Salida 'dd/mm/yyyy') 
-Returns Varchar(150)
+Returns Varchar(1000)
 As
 
 Begin
    Declare
-      @o_salida           Varchar(100),
-      @w_parametroChar    Varchar(150),
+      @o_salida           Varchar(  100),
+      @w_parametroChar    Varchar(1000),
       @w_parametroNumber  Numeric(24, 6),
-      @w_parametroFecha   Datetime
+      @w_parametroFecha   Datetime;
 
    Begin
       Select @w_parametroChar    = parametroChar,

@@ -68,9 +68,26 @@ Begin
                                       @PsIpAct           = @PsIpAct          , 
                                       @PsMacAddressAct   = @PsMacAddressAct  , 
                                       @PnEstatus         = @PnEstatus Output ,       
-                                      @PsMensaje         = @PsMensaje Output        
+                                      @PsMensaje         = @PsMensaje Output;       
                   
    Select @PnEstatus, @PsMensaje
+
+   Select @PsDescripcion     = 'Porcentaje de espacio libre para Archivo de BD',
+          @PsParametroChar   = Null,
+          @PnParametroNumber = 26;
+
+   Execute Spa_conParametrosGralesTbl @PsDescripcion     = @PsDescripcion    , 
+                                      @PnParametroNumber = @PnParametroNumber, 
+                                      @PsParametroChar   = @PsParametroChar  , 
+                                      @PdParametroFecha  = @PdParametroFecha , 
+                                      @PnIdUsuarioAct    = @PnIdUsuarioAct   , 
+                                      @PsIpAct           = @PsIpAct          , 
+                                      @PsMacAddressAct   = @PsMacAddressAct  , 
+                                      @PnEstatus         = @PnEstatus Output ,       
+                                      @PsMensaje         = @PsMensaje Output;       
+                  
+   Select @PnEstatus, @PsMensaje;
+   
    
    Return
 

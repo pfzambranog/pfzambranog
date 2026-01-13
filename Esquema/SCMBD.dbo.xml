@@ -86,7 +86,7 @@
             <column ascending="true" name="valor"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="catMantenimentoTablasTbl" numRows="3" remarks="Catálogo de Tablas a ser depuradas." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="catMantenimentoTablasTbl" numRows="4" remarks="Catálogo de Tablas a ser depuradas." schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Mantenimiento" size="4" type="int identity" typeCode="4">
             <child catalog="SCMBD" column="secuencia" foreignKey="logMantenimientoDepTablaFk01" implied="false" onDeleteCascade="true" schema="dbo" table="logMantenimientoDepTablaTbl"/>
          </column>
@@ -236,7 +236,7 @@
             <column ascending="true" name="idGrupo"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="conMotivosCorreoTbl" numRows="8" remarks="Catálogo de Configuración de Motivos de Emisión de Correos." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="conMotivosCorreoTbl" numRows="9" remarks="Catálogo de Configuración de Motivos de Emisión de Correos." schema="dbo" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="idMotivo" nullable="false" remarks="Código de Motivo de Emisión de Correo" size="2" type="smallint" typeCode="5">
             <child catalog="SCMBD" column="idMotivoCorreo" foreignKey="conProcedimientosCorreoFk01" implied="false" onDeleteCascade="false" schema="dbo" table="conProcedimientosCorreoTbl"/>
             <child catalog="SCMBD" column="idMotivoCorreo" foreignKey="conProcesosFk02" implied="false" onDeleteCascade="false" schema="dbo" table="conProcesosTbl"/>
@@ -278,7 +278,7 @@
             <column ascending="true" name="idParametro"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="conParametrosGralesTbl" numRows="31" remarks="CatáloGo de Parámetros de Generales de Configuración" schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="conParametrosGralesTbl" numRows="32" remarks="CatáloGo de Parámetros de Generales de Configuración" schema="dbo" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="idParametroGral" nullable="false" remarks="CódiGo de Parámetro General de Configuración" size="2" type="smallint" typeCode="5"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="descripcion" nullable="true" remarks="Descripción de Parámetro General de Configuración" size="100" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="parametroChar" nullable="true" remarks="Parámetro Tipo Char." size="1000" type="varchar" typeCode="12"/>
@@ -330,7 +330,7 @@
             <column ascending="true" name="idProcedimiento"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="conProcesosTbl" numRows="13" remarks="Tabla de Control de Procesos y Emisión de Correos." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="conProcesosTbl" numRows="17" remarks="Tabla de Control de Procesos y Emisión de Correos." schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Único del Proceso." size="4" type="int identity" typeCode="4">
             <child catalog="SCMBD" column="idProceso" foreignKey="movDatosAdicionalesCorreoFk01" implied="false" onDeleteCascade="true" schema="dbo" table="movDatosAdicionalesCorreoTbl"/>
          </column>
@@ -503,7 +503,7 @@
             <column ascending="true" name="secuencia"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="logMantenIndicesDetTbl" numRows="138" remarks="Log Detallado de Proceso Mantenimiento de Índices." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="logMantenIndicesDetTbl" numRows="11261" remarks="Log Detallado de Proceso Mantenimiento de Índices." schema="dbo" type="TABLE">
          <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="idProcesoDet" nullable="false" remarks="Identificador Correlativo del Detalle de Proceso de Mantenimiento." size="4" type="int identity" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso Padre de Mantenimiento." size="4" type="int" typeCode="4">
             <parent catalog="SCMBD" column="idProceso" foreignKey="logMantenIndicesDetFk01" implied="false" onDeleteCascade="true" schema="dbo" table="logMantenIndicesTbl"/>
@@ -525,7 +525,7 @@
             <column ascending="true" name="secuencia"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="logMantenIndicesTbl" numRows="1" remarks="Log de Proceso Mantenimiento de Índices." schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="logMantenIndicesTbl" numRows="7" remarks="Log de Proceso Mantenimiento de Índices." schema="dbo" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="idProceso" nullable="false" remarks="Identificador Correlativo del Proceso de Mantenimiento." size="4" type="int" typeCode="4">
             <child catalog="SCMBD" column="idProceso" foreignKey="logMantenIndicesDetFk01" implied="false" onDeleteCascade="true" schema="dbo" table="logMantenIndicesDetTbl"/>
          </column>
@@ -661,7 +661,7 @@
             <column ascending="true" name="idProceso"/>
          </index>
       </table>
-      <table catalog="SCMBD" name="movEnvioCorreosTbl" numRows="67" remarks="Tabla de Movimientos de Envío de Correos" schema="dbo" type="TABLE">
+      <table catalog="SCMBD" name="movEnvioCorreosTbl" numRows="75" remarks="Tabla de Movimientos de Envío de Correos" schema="dbo" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="mailitem_id" nullable="false" remarks="Identificador Único del Correo Enviado" size="4" type="int" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="3" id="1" name="fechaEnvio" nullable="false" remarks="Fecha del Correo Enviado" size="16" type="datetime" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="idProceso" nullable="false" remarks="Identificador relacionado al Correo Enviado" size="4" type="int" typeCode="4"/>
@@ -5217,11 +5217,14 @@ Declare
    @w_idUsuarioAct        Integer,
    @w_idAplicacion        Smallint,
    @w_fragmentacion       Decimal(10, 3),
+   @w_porcFragm           Decimal(10, 2),
    @w_desc_error          Varchar ( 250),
    @w_proceso             Varchar ( 100),
    @w_actividad           Varchar (  80),
    @w_ip                  Varchar (  30),
    @w_grupoCorreo         Varchar (  20),
+   @w_incidencia          Varchar ( 150),
+   @w_parametros          Varchar ( Max),
    @w_usuario             Varchar ( Max),
    @w_mensaje             Varchar ( Max),
    @w_sql                 NVarchar(1500),
@@ -5232,6 +5235,7 @@ Declare
    @w_idMotivoCorreo      Smallint,
    @w_idTipoNotificacion  Smallint,
    @w_comilla             Char(1),
+   @w_fechaAct            Datetime,
    @w_dbName              Sysname,
    @w_servidor            Sysname,
    @w_esquema             Sysname,
@@ -5259,9 +5263,11 @@ Begin
    Select @PnEstatus            = 0,
           @PsMensaje            = Char(32),
           @w_comilla            = Char(39),
+          @w_fechaAct           = Getdate(),
           @w_servidor           = @@ServerName,
           @w_secuencia          = 0,
           @w_idAplicacion       = 27,
+          @w_idMotivoCorreo     = 104,
           @w_ip                 = dbo.Fn_buscaDireccionIP();
 
    Select @w_ip = Replace(@w_ip, '(', ''),
@@ -5287,14 +5293,14 @@ Begin
                       @PsMensaje = dbo.Fn_Busca_MensajeError (@PnEstatus);
                Goto Salida;
             End
- 
+
          If @w_idEstatus != 0
             Begin
                Select @PnEstatus = 8201,
                       @PsMensaje = dbo.Fn_Busca_MensajeError (@PnEstatus);
                Goto Salida;
-            End        
-         
+            End
+
       End
 
    If Cursor_status('global', 'C_BaseD') >= -1
@@ -5302,22 +5308,14 @@ Begin
          Close      C_BaseD
          Deallocate C_BaseD
       End
-      
+
 --
 -- Definición de CURSOR
 --
    Declare
       C_BaseD Cursor For
       Select name
-      From   sys.databases a
-      Where  state_desc = 'ONLINE'
-      And    name  Not In ('master', 'tempdb', 'model', 'msdb')
-      And    name       = Isnull(@PsDbName, a.name)
-      Order  By 1;
-      
---
--- Creación de Tablas Temporales.
--]]></definition>
+      From   sys.databas]]></definition>
          <parameters>
             <parameter mode="IN" name="@PsDbName" type="nvarchar"/>
             <parameter mode="INOUT" name="@PnEstatus" type="int"/>
@@ -8026,6 +8024,135 @@ Versión:     1
          <parameters>
             <parameter mode="IN" name="@PnIdProceso" type="int"/>
             <parameter mode="IN" name="@PnIdUsuarioAct" type="int"/>
+            <parameter mode="INOUT" name="@PnEstatus" type="int"/>
+            <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
+         </parameters>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="false" name="Spp_notificaMantenimientoIndices" type="PROCEDURE">
+         <comment><![CDATA[Procedimiento que notifica la Ejecución del Mantenimiento de Índices.]]></comment>
+         <definition language="SQL"><![CDATA[/*
+
+Declare
+   @PnIdProceso             Integer      = 0,
+   @PnEstatus               Integer      = 0,
+   @PsMensaje               Varchar(250) = Null;
+
+Begin
+   Execute dbo.Spp_notificaMantenimientoIndices @PnIdProceso    = @PnIdProceso,
+                                                @PnEstatus      = @PnEstatus Output,
+                                                @PsMensaje      = @PsMensaje Output;
+
+   If @PnEstatus != 0
+      Begin
+         Select @PnEstatus As Estatus, @PsMensaje As Mensaje
+     End
+
+   Return
+
+End
+Go
+*/
+
+Create   Procedure dbo.Spp_notificaMantenimientoIndices
+  (@PnIdProceso             Integer,
+   @PnEstatus               Integer      = 0    Output,
+   @PsMensaje               Varchar(250) = Null Output)
+As
+
+Declare
+   @w_error                    Integer,
+   @w_desc_error               Varchar(  250),
+   @w_registros                Integer,
+   @w_secuencia                Integer,
+   @w_sql                      NVarchar( 1500),
+   @w_param                    NVarchar(  750),
+   @w_comilla                  Char(1),
+   @w_basedatos                Sysname,
+   @w_tablaLog                 Sysname,
+--
+   @w_idSession                Varchar(  64),
+   @w_idEstatus                Tinyint,
+   @w_idGrupo                  Integer,
+   @w_idMotivoCorreo           Integer,
+   @w_parametros               Varchar( Max),
+   @w_account_name             Sysname,
+   @w_grupoCorreo              Varchar(  20),
+   @w_idAplicacion             Integer,
+   @w_fechaInicial             Date,
+   @w_fechaTermino             Date,
+--
+   @w_comando                  Varchar(8000),
+   @w_salida                   Varchar(8000),
+   @w_consultaTexto            NVarchar(2048),
+   @w_consultaEncriptada       NVarchar(4000),
+   @w_html                     Nvarchar(Max),
+   @w_idObject                 Integer,
+   @w_archivoXML               Xml,
+   @w_cadenaEncriptada         Varchar(4000),
+   @w_URL                      Varchar( 750),
+   @w_incidencia               Varchar( 250),
+--
+   @w_procedimiento            Sysname,
+   @w_ultimaEjecucion          Datetime,
+   @w_cantidadEjecuciones      Integer,
+   @w_tiempoMinimoEjecucion    Decimal(18, 2),
+   @w_tiempoMaximoEjecucion    Decimal(18, 2),
+--
+   @w_idReceptor               Integer,
+   @w_aplicacion               Varchar(100),
+   @w_cuerpo                   Varchar(Max),
+   @w_body                     Varchar(Max),
+   @w_usuario                  Varchar(Max),
+   @w_saludo                   Varchar(100),
+   @w_nombre                   Varchar(100),
+   @w_correo                   Varchar(100),
+   @w_asunto                   Varchar(250),
+   @w_ipOrigen                 Varchar( 20),
+   @w_server                   Sysname,
+   @w_instancia                Sysname,
+   @w_ambiente                 Sysname,
+   @w_linea                    Integer,
+   @w_idCorreo                 Integer,
+   @w_registrosUser            Integer,
+   @w_idProceso                Integer,
+   @w_idUsuarioAct             Integer;
+
+Declare
+   @w_UsuarioReceptorCorreo Table
+   (secuencia    Integer       Not Null Identity(1, 1) Primary Key,
+    idReceptor   Integer       Not Null);
+
+Declare
+   @w_GrupoReceptorCorreoDet Table
+   (secuencia    Integer       Not Null Identity(1, 1) Primary Key,
+    idReceptor   Integer       Not Null,
+    correo       Varchar(250)      Null,
+    nombre       Varchar(100)      Null);
+
+Begin
+
+-- Objetivo:    Genera Notificación de Problemas de conexión de los Linked Server.
+-- Programador: Pedro Felipe Zambrano
+-- Fecha:       31/10/2025
+-- Versión:     1
+--
+
+   Set Nocount         On
+   Set Xact_Abort      On
+   Set Ansi_Nulls      Off
+   Set Ansi_Warnings   OFF
+
+--
+-- Inicializamos Variables
+--
+
+   Select @PnEstatus            = 0,
+          @PsMensaje            = '',
+          @w_comilla            = Char(39),
+          @w_secuencia          = 0,
+          @w_saludo]]></definition>
+         <parameters>
+            <parameter mode="IN" name="@PnIdProceso" type="int"/>
             <parameter mode="INOUT" name="@PnEstatus" type="int"/>
             <parameter mode="INOUT" name="@PsMensaje" type="varchar"/>
          </parameters>

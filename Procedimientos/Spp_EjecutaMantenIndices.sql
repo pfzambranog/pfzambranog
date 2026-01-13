@@ -78,7 +78,7 @@ Begin
    Set Nocount         On
    Set Xact_Abort      On
    Set Ansi_Nulls      Off
-   Set Ansi_Warnings   OFF
+   Set Ansi_Warnings   Off
 
 --
 -- Incializamos Variables
