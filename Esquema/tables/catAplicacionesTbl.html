@@ -136,6 +136,11 @@
                                                 <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
                                             </tr>
                                             <tr>
+                                                <td title="conParametrosCorreoTbl.idAplicacion references catAplicacionesTbl.idAplicacion via conParametrosCorreoFk02"><a href='conParametrosCorreoTbl.html'>conParametrosCorreoTbl</a><span class='relatedKey'>.idAplicacion</span></td>
+                                                <td class="constraint detail">conParametrosCorreoFk02</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                            <tr>
                                                 <td title="movEnvioCorreosTbl.idAplicacion&#39;s name implies that it&#39;s a child of catAplicacionesTbl.idAplicacion, but it doesn&#39;t reference that column."><a href='movEnvioCorreosTbl.html'>movEnvioCorreosTbl</a><span class='relatedKey'>.idAplicacion</span></td>
                                                 <td class="constraint detail">Implied Constraint</td>
                                                 <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
@@ -316,35 +321,39 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="segRelAplicacionUsuarioTbl.html" target="_top" title="segRelAplicacionUsuarioTbl" alt="" coords="349,5,639,181">
-<area shape="rect" id="node2" href="catAplicacionesTbl.html" target="_top" title="catAplicacionesTbl" alt="" coords="5,32,305,307">
+<area shape="rect" id="node1" href="conParametrosCorreoTbl.html" target="_top" title="conParametrosCorreoTbl" alt="" coords="361,5,627,181">
+<area shape="rect" id="node2" href="catAplicacionesTbl.html" target="_top" title="catAplicacionesTbl" alt="" coords="5,129,305,404">
+<area shape="rect" id="node3" href="segRelAplicacionUsuarioTbl.html" target="_top" title="segRelAplicacionUsuarioTbl" alt="" coords="349,199,639,375">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/catAplicacionesTbl.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="segRelAplicacionUsuarioTbl.html" target="_top" title="segRelAplicacionUsuarioTbl" alt="" coords="349,236,639,412">
+<area shape="rect" id="node1" href="conParametrosCorreoTbl.html" target="_top" title="conParametrosCorreoTbl" alt="" coords="361,11,627,187">
 <area shape="rect" id="node2" href="catAplicacionesTbl.html" target="_top" title="catAplicacionesTbl" alt="" coords="5,5,305,280">
 <area shape="rect" id="node3" href="segUsuariosTbl.html" target="_top" title="segUsuariosTbl" alt="" coords="59,297,252,385">
+<area shape="rect" id="node4" href="segRelAplicacionUsuarioTbl.html" target="_top" title="segRelAplicacionUsuarioTbl" alt="" coords="349,236,639,412">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/catAplicacionesTbl.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="oneimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagramImplied" name="oneDegreeRelationshipsDiagramImplied">
 <area shape="rect" id="node1" href="conEmisionNotificacionesTbl.html" target="_top" title="conEmisionNotificacionesTbl" alt="" coords="349,5,647,123">
-<area shape="rect" id="node2" href="catAplicacionesTbl.html" target="_top" title="catAplicacionesTbl" alt="" coords="5,196,305,471">
-<area shape="rect" id="node3" href="movEnvioCorreosTbl.html" target="_top" title="movEnvioCorreosTbl" alt="" coords="381,140,615,316">
-<area shape="rect" id="node4" href="segRelAplicacionUsuarioTbl.html" target="_top" title="segRelAplicacionUsuarioTbl" alt="" coords="353,333,643,509">
+<area shape="rect" id="node2" href="catAplicacionesTbl.html" target="_top" title="catAplicacionesTbl" alt="" coords="5,279,305,553">
+<area shape="rect" id="node3" href="conParametrosCorreoTbl.html" target="_top" title="conParametrosCorreoTbl" alt="" coords="365,140,631,316">
+<area shape="rect" id="node4" href="movEnvioCorreosTbl.html" target="_top" title="movEnvioCorreosTbl" alt="" coords="381,333,615,509">
+<area shape="rect" id="node5" href="segRelAplicacionUsuarioTbl.html" target="_top" title="segRelAplicacionUsuarioTbl" alt="" coords="353,527,643,703">
 </map>
                                         <a name='diagram'><img id="oneimpliedDegreeImg" src="../diagrams/tables/catAplicacionesTbl.implied1degrees.png" usemap="#oneDegreeRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twoimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagramImplied" name="twoDegreesRelationshipsDiagramImplied">
-<area shape="rect" id="node1" href="conEmisionNotificacionesTbl.html" target="_top" title="conEmisionNotificacionesTbl" alt="" coords="349,199,647,316">
-<area shape="rect" id="node2" href="catAplicacionesTbl.html" target="_top" title="catAplicacionesTbl" alt="" coords="5,149,305,424">
-<area shape="rect" id="node3" href="movEnvioCorreosTbl.html" target="_top" title="movEnvioCorreosTbl" alt="" coords="381,5,615,181">
-<area shape="rect" id="node4" href="segRelAplicacionUsuarioTbl.html" target="_top" title="segRelAplicacionUsuarioTbl" alt="" coords="353,380,643,556">
-<area shape="rect" id="node5" href="segUsuariosTbl.html" target="_top" title="segUsuariosTbl" alt="" coords="59,441,252,529">
+<area shape="rect" id="node1" href="conEmisionNotificacionesTbl.html" target="_top" title="conEmisionNotificacionesTbl" alt="" coords="349,5,647,123">
+<area shape="rect" id="node2" href="catAplicacionesTbl.html" target="_top" title="catAplicacionesTbl" alt="" coords="5,217,305,492">
+<area shape="rect" id="node3" href="conParametrosCorreoTbl.html" target="_top" title="conParametrosCorreoTbl" alt="" coords="365,333,631,509">
+<area shape="rect" id="node4" href="segUsuariosTbl.html" target="_top" title="segUsuariosTbl" alt="" coords="59,529,252,617">
+<area shape="rect" id="node5" href="movEnvioCorreosTbl.html" target="_top" title="movEnvioCorreosTbl" alt="" coords="381,140,615,316">
+<area shape="rect" id="node6" href="segRelAplicacionUsuarioTbl.html" target="_top" title="segRelAplicacionUsuarioTbl" alt="" coords="353,527,643,703">
 </map>
                                         <a name='diagram'><img id="twoimpliedDegreeImg" src="../diagrams/tables/catAplicacionesTbl.implied2degrees.png" usemap="#twoDegreesRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
                                     </div>
